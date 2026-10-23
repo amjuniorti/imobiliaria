@@ -1,0 +1,323 @@
+/* ========================================
+   PÁGINA DE DETALHES DO IMÓVEL
+   ======================================== */
+
+.imovel-page {
+    padding: 30px 20px 80px;
+    min-height: 60vh;
+}
+
+/* -------- BREADCRUMB -------- */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 13px;
+    color: #718096;
+    margin-bottom: 25px;
+}
+
+.breadcrumb a {
+    color: #2b6cb0;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover { text-decoration: underline; }
+
+.breadcrumb i { font-size: 10px; }
+
+/* -------- LOADING / ERRO -------- */
+.loading,
+.erro {
+    text-align: center;
+    padding: 80px 20px;
+    color: #4a5568;
+}
+
+.loading i,
+.erro i {
+    font-size: 48px;
+    color: #2b6cb0;
+    margin-bottom: 20px;
+}
+
+.erro i { color: #dd6b20; }
+
+.erro h2 { color: #1a365d; margin-bottom: 10px; }
+
+/* -------- GALERIA -------- */
+.galeria {
+    margin-bottom: 30px;
+}
+
+.galeria-principal {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #edf2f7;
+}
+
+.galeria-principal img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.3s;
+}
+
+.imovel-tag {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    background: #2b6cb0;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.imovel-tag.aluguel { background: #dd6b20; }
+
+.galeria-miniaturas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.galeria-miniaturas img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: 0.65;
+    transition: opacity 0.2s, transform 0.2s;
+    border: 2px solid transparent;
+}
+
+.galeria-miniaturas img:hover { opacity: 1; transform: scale(1.03); }
+
+.galeria-miniaturas img.ativa {
+    opacity: 1;
+    border-color: #2b6cb0;
+}
+
+/* -------- GRID PRINCIPAL -------- */
+.imovel-grid {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 35px;
+    margin-bottom: 40px;
+}
+
+@media (max-width: 900px) {
+    .imovel-grid { grid-template-columns: 1fr; }
+    .galeria-principal { height: 320px; }
+}
+
+/* -------- INFO ESQUERDA -------- */
+.imovel-info h1 {
+    font-size: 28px;
+    color: #1a365d;
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+
+.imovel-local {
+    color: #718096;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+.imovel-local i { color: #2b6cb0; margin-right: 6px; }
+
+.imovel-preco-box {
+    background: #f0fdf4;
+    border-left: 4px solid #276749;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+.imovel-preco {
+    font-size: 30px;
+    font-weight: bold;
+    color: #276749;
+    display: block;
+}
+
+.imovel-preco-nota {
+    font-size: 13px;
+    color: #4a5568;
+}
+
+/* Características (quartos, banheiros...) */
+.imovel-caracteristicas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.carac-item {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+
+.carac-item:hover { border-color: #2b6cb0; }
+
+.carac-item i {
+    font-size: 22px;
+    color: #2b6cb0;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.carac-item strong {
+    display: block;
+    font-size: 18px;
+    color: #1a365d;
+}
+
+.carac-item span {
+    font-size: 12px;
+    color: #718096;
+}
+
+/* Seções */
+.imovel-secao {
+    margin-bottom: 30px;
+}
+
+.imovel-secao h2 {
+    font-size: 18px;
+    color: #1a365d;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.imovel-secao h2 i { color: #2b6cb0; }
+
+.imovel-secao p {
+    color: #4a5568;
+    line-height: 1.7;
+    font-size: 15px;
+}
+
+/* Comodidades */
+.comodidades-lista {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+.comodidades-lista li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #4a5568;
+    font-size: 14px;
+    padding: 8px 10px;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.comodidades-lista li i {
+    color: #276749;
+}
+
+/* -------- SIDEBAR CONTATO -------- */
+.imovel-sidebar {
+    position: sticky;
+    top: 90px;
+    align-self: start;
+}
+
+@media (max-width: 900px) {
+    .imovel-sidebar { position: static; }
+}
+
+.contato-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.contato-card h3 {
+    color: #1a365d;
+    margin-bottom: 6px;
+    font-size: 20px;
+}
+
+.contato-card > p {
+    color: #718096;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.btn-whatsapp-imovel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #25d366;
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-bottom: 18px;
+    transition: background 0.2s;
+}
+
+.btn-whatsapp-imovel:hover { background: #1ebe5b; }
+
+.form-interesse input,
+.form-interesse textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.form-interesse button { width: 100%; }
+
+.contato-info-sidebar {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid #edf2f7;
+    font-size: 13px;
+    color: #4a5568;
+}
+
+.contato-info-sidebar p {
+    margin-bottom: 8px;
+}
+
+.contato-info-sidebar i {
+    color: #2b6cb0;
+    margin-right: 6px;
+    width: 16px;
+}
+
+/* -------- VOLTAR -------- */
+.voltar-wrap {
+    text-align: center;
+    margin-top: 20px;
+}
