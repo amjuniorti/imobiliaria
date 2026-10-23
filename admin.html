@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin | Sua Casa Imóveis</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        /* Banner no topo igual ao resto do site */
+        .banner-admin { 
+            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat; 
+            padding: 120px 0 80px; 
+            text-align: center; 
+            color: #fff; 
+        }
+        .banner-admin h2 { font-size: 36px; margin-bottom: 10px; }
+        .banner-admin p { color: #cbd5e0; font-size: 16px; }
+
+        /* Tela de Login Flutuante */
+        .login-container {
+            margin-top: -60px; 
+            position: relative; 
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+        }
+        .login-box {
+            background: var(--bg-card, #fff); 
+            padding: 40px; 
+            border-radius: 16px; 
+            text-align: center; 
+            max-width: 400px; 
+            width: 100%; 
+            box-shadow: var(--shadow, 0 10px 30px rgba(0,0,0,0.15));
+            border: 1px solid var(--border-color, #e2e8f0);
+        }
+        .login-box h2 { color: var(--text-main, #1a365d); margin-bottom: 20px; }
+        .login-box input { 
+            width: 100%; padding: 14px; margin-bottom: 15px; 
+            border: 1px solid var(--border-color, #cbd5e0); 
+            background: var(--bg-body, #f8f9fa);
+            color: var(--text-main, #333);
+            border-radius: 8px; font-family: inherit;
+        }
+
+        /* Painel Admin */
+        .admin-main {
+            margin-top: -40px;
+            position: relative;
+            z-index: 10;
+            padding-bottom: 60px;
+        }
+
+        /* Estilos das Abas */
+        .admin-tabs { 
+            display: flex; gap: 10px; margin-bottom: 20px; 
+            border-bottom: 2px solid var(--border-color, #e2e8f0); 
+            padding-bottom: 10px; 
+        }
+        .tab-btn { 
+            background: none; border: none; padding: 10px 20px; 
+            font-size: 16px; cursor: pointer; 
+            color: var(--text-muted, #718096); font-weight: bold; 
+        }
+        .tab-btn.active { 
+            color: var(--primary-color, #2b6cb0); 
+            border-bottom: 3px solid var(--primary-color, #2b6cb0); 
+            margin-bottom: -12px; 
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Gerenciador de Fotos na Edição */
+        .foto-edit-container { position: relative; width: 100px; height: 100px; border-radius: 6px; overflow: hidden; border: 1px solid #cbd5e0; }
+        .foto-edit-container img { width: 100%; height: 100%; object-fit: cover; }
+        .controles-foto { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); display: flex; justify-content: space-between; padding: 4px; }
+        .controles-foto button { background: none; border: none; color: white; cursor: pointer; padding: 2px 6px; font-size: 12px; }
+        .controles-foto button:hover { color: #63b3ed; }
+        .btn-remover-foto { position: absolute; top: 2px; right: 2px; background: rgba(229, 62, 62, 0.9); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: background 0.2s; }
+        .btn-remover-foto:hover { background: #c53030; }
+        .foto-edit-container.capa { border: 3px solid var(--primary-color, #2b6cb0); }
+        .capa-label { position: absolute; top: 2px; left: 2px; background: var(--primary-color, #2b6cb0); color: white; font-size: 10px; padding: 2px 4px; border-radius: 4px; font-weight: bold; }
+
+        /* Barra de busca do admin */
+        .admin-busca-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        .admin-busca-container input, .admin-busca-container select { padding: 10px; border: 1px solid var(--border-color, #cbd5e0); border-radius: 6px; outline: none; font-family: inherit; background: var(--bg-body, #fff); color: var(--text-main); }
+        .admin-busca-container input { flex: 1; }
+    </style>
+</head>
+<body class="admin-body">
+
+    <header class="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">Sua Casa <span>Imóveis</span></a>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <nav class="nav" id="nav">
+                <a href="index.html" target="_blank"><i class="fa-solid fa-eye"></i> Ver Site</a>
+                <button class="btn-tema" id="btn-tema" aria-label="Alternar Tema">
+                    <i class="fa-solid fa-moon" id="icone-tema"></i>
+                </button>
+                <a href="#" id="btn-sair" style="color: #fc8181; font-weight: bold; display: none;"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="banner-admin">
+        <h2>Painel de Controle</h2>
+        <p>Gerencie seus imóveis e mensagens</p>
+    </div>
+
+    <div id="tela-login" class="login-container" style="display: none;">
+        <div class="login-box">
+            <h2>Área Restrita</h2>
+            <form id="form-login">
+                <input type="email" id="login-email" placeholder="E-mail" required>
+                <input type="password" id="login-senha" placeholder="Senha" required>
+                <button type="submit" class="btn-salvar-admin">Entrar no Painel</button>
+            </form>
+            <p id="erro-login" style="color: #e53e3e; margin-top: 10px; display: none;">E-mail ou senha incorretos.</p>
+        </div>
+    </div>
+
+    <main id="painel-admin" class="container admin-main" style="display: none;">
+        
+        <div class="admin-tabs">
+            <button class="tab-btn active" data-tab="tab-imoveis">Imóveis</button>
+            <button class="tab-btn" data-tab="tab-mensagens">Mensagens Recebidas</button>
+        </div>
+
+        <div id="tab-imoveis" class="tab-content active">
+            <div class="admin-grid">
+                
+                <section class="admin-form-section">
+                    <h2 id="form-titulo">Adicionar Novo Imóvel</h2>
+                    <form id="form-imovel">
+                        <input type="hidden" id="imovel-id">
+                        <input type="hidden" id="codigo"> <!-- NOVO CAMPO OCULTO -->
+                        
+                        <div class="input-group">
+                            <label>Título do Imóvel</label>
+                            <input type="text" id="titulo" required placeholder="Ex: Casa Residencial 3 Quartos">
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>Negócio</label>
+                                <select id="negocio" required>
+                                    <option value="venda">Venda</option>
+                                    <option value="aluguel">Aluguel</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Tipo (Digite ou selecione)</label>
+                                <input type="text" id="tipo" required placeholder="Ex: Chácara" list="lista-tipos">
+                                <datalist id="lista-tipos">
+                                    <option value="Casa">
+                                    <option value="Apartamento">
+                                    <option value="Terreno">
+                                    <option value="Comercial">
+                                    <option value="Chácara">
+                                    <option value="Sítio">
+                                </datalist>
+                            </div>
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>Bairro</label>
+                                <input type="text" id="bairro" required placeholder="Ex: Centro">
+                            </div>
+                            <div class="input-group">
+                                <label>Preço (Apenas números)</label>
+                                <input type="number" id="preco" required placeholder="Ex: 450000">
+                            </div>
+                        </div>
+                        
+                        <!-- NOVO CAMPO: NOTA DO PREÇO -->
+                        <div class="input-group">
+                            <label>Texto abaixo do Preço (Opcional)</label>
+                            <input type="text" id="nota_preco" placeholder="Ex: à vista ou financiado">
+                        </div>
+
+                        <!-- NOVOS CAMPOS: DESCRIÇÃO E COMODIDADES -->
+                        <div class="input-group">
+                            <label>Descrição do Imóvel</label>
+                            <textarea id="descricao" rows="3" placeholder="Descreva os detalhes do imóvel..." style="padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-body); color: var(--text-main); font-family: inherit; resize: vertical;"></textarea>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Comodidades (Separe por vírgula)</label>
+                            <input type="text" id="comodidades" placeholder="Ex: Piscina, Churrasqueira, Academia">
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>Quartos</label>
+                                <input type="number" id="quartos" required value="3">
+                            </div>
+                            <div class="input-group">
+                                <label>Banheiros</label>
+                                <input type="number" id="banheiros" required value="2">
+                            </div>
+                            <div class="input-group">
+                                <label>Vagas</label>
+                                <input type="number" id="vagas" required value="1">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Fotos do Imóvel (Selecione várias)</label>
+                            <input type="file" id="imagem" accept="image/*" multiple onchange="previewNovasFotos(event)">
+                            <div id="fotos-atuais" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;"></div>
+                        </div>
+
+                        <button type="submit" class="btn-salvar-admin" id="btn-salvar">
+                            <i class="fa-solid fa-floppy-disk"></i> Salvar Imóvel
+                        </button>
+                        
+                        <button type="button" class="btn-limpar" id="btn-cancelar" style="display:none; width:100%; margin-top:10px; padding: 12px;">
+                            Cancelar Edição
+                        </button>
+                    </form>
+                </section>
+
+                <section class="admin-lista-section">
+                    <h2>Imóveis Publicados</h2>
+                    
+                    <div class="admin-busca-container">
+                        <input type="text" id="busca-admin" placeholder="Buscar por título ou bairro...">
+                        <select id="filtro-negocio-admin">
+                            <option value="todos">Todos</option>
+                            <option value="venda">Venda</option>
+                            <option value="aluguel">Aluguel</option>
+                        </select>
+                    </div>
+
+                    <div id="lista-admin" class="lista-admin"></div>
+                </section>
+
+            </div>
+        </div>
+
+        <div id="tab-mensagens" class="tab-content">
+            <div class="admin-lista-section" style="max-width: 800px; margin: 0 auto;">
+                <h2>Mensagens de Contato</h2>
+                <div id="lista-mensagens" class="lista-admin"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

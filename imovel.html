@@ -4,65 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalhes do Imóvel | Sua Casa Imóveis</title>
-
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/imovel.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .banner-interno { background: linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat; padding: 120px 0 80px; text-align: center; color: #fff; }
+        .imovel-page { margin-top: -40px; padding: 40px; border-radius: 16px; position: relative; z-index: 10; }
+        @media (max-width: 768px) { .banner-interno { padding: 100px 15px 60px; } .imovel-page { padding: 20px; } }
+    </style>
 </head>
-
 <body>
 
-    <!-- HEADER (igual ao index) -->
     <header class="header">
         <div class="container nav-container">
             <a href="index.html" class="logo">Sua Casa <span>Imóveis</span></a>
-
             <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
                 <i class="fa-solid fa-bars"></i>
             </button>
-
             <nav class="nav" id="nav">
-                <a href="index.html#home">Início</a>
-                <a href="index.html#destaques">Destaques</a>
+                <a href="index.html">Início</a>
+                <a href="imoveis.html">Todos os Imóveis</a>
                 <a href="index.html#sobre">Sobre</a>
+                <button class="btn-tema" id="btn-tema" aria-label="Alternar Tema">
+                    <i class="fa-solid fa-moon" id="icone-tema"></i>
+                </button>
                 <a href="index.html#contato" class="btn-contato">Fale Conosco</a>
             </nav>
         </div>
     </header>
 
-    <!-- CONTEÚDO DO IMÓVEL -->
-    <main class="imovel-page container">
+    <div class="banner-interno">
+        <h2>Detalhes do Imóvel</h2>
+        <p>Confira todas as informações e fotos</p>
+    </div>
 
-        <!-- Breadcrumb -->
-        <nav class="breadcrumb" aria-label="Navegação">
-            <a href="index.html">Início</a>
-            <i class="fa-solid fa-chevron-right"></i>
-            <a href="index.html#destaques">Imóveis</a>
-            <i class="fa-solid fa-chevron-right"></i>
-            <span id="breadcrumb-nome">Carregando...</span>
-        </nav>
-
-        <!-- Estado de carregamento -->
-        <div id="loading" class="loading">
-            <i class="fa-solid fa-spinner fa-spin"></i>
-            <p>Carregando imóvel...</p>
+    <main class="container" style="padding-bottom: 80px;">
+        <div id="loading" class="loading" style="text-align: center; padding: 80px 20px;">
+            <i class="fa-solid fa-spinner fa-spin fa-3x" style="color: #ed8936; margin-bottom: 20px;"></i>
+            <p style="color: var(--text-muted); font-size: 18px;">Buscando informações...</p>
         </div>
 
-        <!-- Estado de erro (imóvel não encontrado) -->
-        <div id="erro" class="erro" style="display:none;">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <h2>Imóvel não encontrado</h2>
-            <p>O imóvel que você procura não existe ou foi removido.</p>
-            <a href="index.html#destaques" class="btn-search" style="display:inline-block;margin-top:20px;text-decoration:none;">
-                <i class="fa-solid fa-arrow-left"></i> Voltar aos imóveis
-            </a>
+        <div id="erro" class="erro" style="display:none; text-align: center; padding: 80px 20px;">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 50px; color: #e53e3e; margin-bottom: 20px;"></i>
+            <h2 style="color: var(--text-main); margin-bottom: 10px;">Imóvel não encontrado</h2>
+            <a href="imoveis.html" class="btn-search" style="display:inline-block; margin-top:30px; text-decoration:none;">Ver outros imóveis</a>
         </div>
 
-        <!-- Conteúdo do imóvel (preenchido via JS) -->
-        <div id="conteudo-imovel" style="display:none;">
+        <div id="conteudo-imovel" class="imovel-page" style="display:none; background: var(--bg-card); box-shadow: var(--shadow); border: 1px solid var(--border-color);">
+            
+            <nav class="breadcrumb" style="margin-bottom: 25px;">
+                <a href="index.html">Início</a> <i class="fa-solid fa-chevron-right" style="font-size: 10px; margin: 0 5px;"></i>
+                <a href="imoveis.html">Imóveis</a> <i class="fa-solid fa-chevron-right" style="font-size: 10px; margin: 0 5px;"></i>
+                <span id="breadcrumb-nome" style="color: var(--text-muted);">...</span>
+            </nav>
 
-            <!-- Galeria -->
             <div class="galeria">
                 <div class="galeria-principal">
                     <img id="imagem-principal" src="" alt="Imóvel">
@@ -71,111 +68,65 @@
                 <div class="galeria-miniaturas" id="miniaturas"></div>
             </div>
 
-            <!-- Grid principal: info + sidebar -->
             <div class="imovel-grid">
-
-                <!-- Coluna esquerda: informações -->
                 <div class="imovel-info">
-
                     <h1 id="imovel-titulo">—</h1>
-
-                    <p class="imovel-local">
-                        <i class="fa-solid fa-location-dot"></i>
-                        <span id="imovel-endereco">—</span>
+                    <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 15px;">
+                        Código do Imóvel: <strong id="imovel-codigo" style="color: var(--primary-color);">—</strong>
                     </p>
-
+                    
+                    <p class="imovel-local"><i class="fa-solid fa-location-dot"></i> <span id="imovel-endereco">—</span></p>
+                    
                     <div class="imovel-preco-box">
                         <span class="imovel-preco" id="imovel-preco">—</span>
                         <span class="imovel-preco-nota" id="imovel-preco-nota"></span>
                     </div>
-
-                    <!-- Características principais -->
+                    
                     <div class="imovel-caracteristicas" id="imovel-caracteristicas"></div>
-
-                    <!-- Descrição -->
+                    
                     <section class="imovel-secao">
                         <h2><i class="fa-solid fa-align-left"></i> Descrição</h2>
                         <p id="imovel-descricao">—</p>
                     </section>
-
-                    <!-- Comodidades -->
+                    
                     <section class="imovel-secao">
                         <h2><i class="fa-solid fa-list-check"></i> Comodidades</h2>
                         <ul class="comodidades-lista" id="imovel-comodidades"></ul>
                     </section>
-
                 </div>
 
-                <!-- Coluna direita: contato -->
                 <aside class="imovel-sidebar">
                     <div class="contato-card">
                         <h3>Tenho interesse</h3>
                         <p>Fale com um de nossos corretores.</p>
-
-                        <a id="btn-whatsapp" href="#" target="_blank" rel="noopener"
-                           class="btn-whatsapp-imovel">
+                        
+                        <!-- BOTÃO DO WHATSAPP LATERAL -->
+                        <a id="btn-whatsapp" href="#" target="_blank" rel="noopener" class="btn-whatsapp-imovel">
                             <i class="fa-brands fa-whatsapp"></i> Falar no WhatsApp
                         </a>
-
-                        <form class="form-interesse" onsubmit="return false;">
-                            <input type="text" placeholder="Seu nome" required>
-                            <input type="email" placeholder="Seu e-mail" required>
-                            <input type="tel" placeholder="Telefone / WhatsApp">
-                            <textarea rows="3" placeholder="Mensagem (opcional)"></textarea>
-                            <button type="submit" class="btn-search">
-                                <i class="fa-solid fa-paper-plane"></i> Enviar interesse
-                            </button>
-                        </form>
 
                         <div class="contato-info-sidebar">
                             <p><i class="fa-solid fa-phone"></i> (11) 99999-9999</p>
                             <p><i class="fa-solid fa-envelope"></i> contato@suacasa.com.br</p>
-                            <p><i class="fa-solid fa-clock"></i> Seg a Sáb, 8h–18h</p>
                         </div>
                     </div>
                 </aside>
-
             </div>
-
-            <!-- Voltar -->
-            <div class="voltar-wrap">
-                <a href="index.html#destaques" class="btn-card" style="display:inline-block;padding:12px 24px;">
-                    <i class="fa-solid fa-arrow-left"></i> Ver outros imóveis
-                </a>
-            </div>
-
         </div>
     </main>
 
-    <!-- FOOTER -->
     <footer class="footer">
         <div class="container footer-grid">
-            <div>
-                <a href="index.html" class="logo" style="color:#fff">Sua Casa <span>Imóveis</span></a>
-                <p>Realizando sonhos, um imóvel de cada vez.</p>
-            </div>
-            <div>
-                <h4>Navegação</h4>
-                <a href="index.html#home">Início</a>
-                <a href="index.html#destaques">Destaques</a>
-                <a href="index.html#sobre">Sobre</a>
-                <a href="index.html#contato">Contato</a>
-            </div>
-            <div>
-                <h4>CRECI</h4>
-                <p>CRECI-SP 00000-J</p>
-                <p>© 2025 Sua Casa Imóveis</p>
-            </div>
+            <div><a href="index.html" class="logo" style="color:#fff">Sua Casa <span>Imóveis</span></a></div>
+            <div><h4>Navegação</h4><a href="index.html">Início</a><a href="imoveis.html">Todos os Imóveis</a></div>
         </div>
     </footer>
-
-    <!-- WHATSAPP FLUTUANTE -->
-    <a href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Gostaria%20de%20mais%20informa%C3%A7%C3%B5es."
-       class="whatsapp-float" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+    
+    <!-- BOTÃO DO WHATSAPP FLUTUANTE (TROQUE O NÚMERO ABAIXO) -->
+    <a href="https://wa.me/5521987654321" class="whatsapp-float" target="_blank" rel="noopener">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
-
+    
     <script src="js/imovel.js"></script>
-
 </body>
 </html>

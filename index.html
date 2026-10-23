@@ -4,79 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sua Casa Imóveis | Encontre seu novo lar</title>
-
-    <!-- FAVICON -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
-
-    <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
-
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-
 <body>
 
-    <!-- 1. CABEÇALHO -->
     <header class="header">
         <div class="container nav-container">
             <a href="index.html" class="logo">Sua Casa <span>Imóveis</span></a>
-
-            <!-- Botão hamburguer (mobile) -->
             <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
                 <i class="fa-solid fa-bars"></i>
             </button>
-
             <nav class="nav" id="nav">
-                <a href="#home">Início</a>
-                <a href="#destaques">Destaques</a>
+                <a href="index.html">Início</a>
+                <a href="imoveis.html">Todos os Imóveis</a>
                 <a href="#sobre">Sobre</a>
+                <button class="btn-tema" id="btn-tema" aria-label="Alternar Tema">
+                    <i class="fa-solid fa-moon" id="icone-tema"></i>
+                </button>
                 <a href="#contato" class="btn-contato">Fale Conosco</a>
             </nav>
         </div>
     </header>
 
-    <!-- 2. HERO + BUSCA RÁPIDA -->
     <section class="hero" id="home">
         <div class="hero-overlay">
             <div class="container">
                 <h1>Encontre o imóvel dos seus sonhos</h1>
                 <p>As melhores opções de compra e aluguel na região</p>
-
-                <!-- Formulário de Busca -->
+                
                 <form class="search-box" id="form-busca" onsubmit="return false;">
                     <div class="search-type">
                         <button type="button" class="type-btn active" data-type="venda">Comprar</button>
                         <button type="button" class="type-btn" data-type="aluguel">Alugar</button>
                     </div>
-
                     <div class="search-fields">
                         <div class="field">
                             <label for="tipo"><i class="fa-solid fa-house"></i> Tipo</label>
-                            <select id="tipo" name="tipo">
-                                <option value="">Todos os Tipos</option>
-                                <option value="casa">Casa</option>
-                                <option value="apartamento">Apartamento</option>
-                                <option value="terreno">Terreno</option>
-                                <option value="comercial">Comercial</option>
-                            </select>
+                            <select id="tipo"><option value="">Todos os Tipos</option></select>
                         </div>
-
                         <div class="field">
                             <label for="bairro"><i class="fa-solid fa-location-dot"></i> Bairro</label>
-                            <select id="bairro" name="bairro">
-                                <option value="">Todos os Bairros</option>
-                                <option value="centro">Centro</option>
-                                <option value="santarosalia">Santa Rosália</option>
-                                <option value="jardimestados">Jardim dos Estados</option>
-                            </select>
+                            <select id="bairro"><option value="">Todos os Bairros</option></select>
                         </div>
-
                         <div class="field">
                             <label for="preco"><i class="fa-solid fa-dollar-sign"></i> Valor Máximo</label>
-                            <input type="number" id="preco" name="preco_max" placeholder="R$ Até quanto?">
+                            <input type="number" id="preco" placeholder="R$ Até quanto?">
                         </div>
-
                         <button type="button" class="btn-search" id="btn-buscar">
                             <i class="fa-solid fa-magnifying-glass"></i> Buscar
                         </button>
@@ -86,206 +62,54 @@
         </div>
     </section>
 
-    <!-- 3. IMÓVEIS EM DESTAQUE -->
     <section class="destaques container" id="destaques">
         <h2>Imóveis em Destaque</h2>
         <p class="subtitle">Confira as melhores oportunidades selecionadas para você</p>
-
-        <!-- Contador + limpar filtros -->
         <div class="resultado-bar" id="resultado-bar">
-            <span id="contador-resultados">6 imóveis encontrados</span>
-            <button type="button" class="btn-limpar" id="btn-limpar">
-                <i class="fa-solid fa-xmark"></i> Limpar filtros
-            </button>
+            <span id="contador-resultados">Carregando...</span>
+            <button type="button" class="btn-limpar" id="btn-limpar"><i class="fa-solid fa-xmark"></i> Limpar filtros</button>
         </div>
-
-        <div class="cards-grid">
-            <!-- Card 1 -->
-            <div class="card" data-tipo="casa" data-bairro="santarosalia" data-preco="450000" data-negocio="venda">
-                <div class="card-tag">Venda</div>
-                <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=500" alt="Casa Residencial">
-                <div class="card-body">
-                    <span class="card-price">R$ 450.000</span>
-                    <h3>Casa Residencial 3 Quartos</h3>
-                    <p class="card-location"><i class="fa-solid fa-location-dot"></i> Bairro Santa Rosália</p>
-                    <div class="card-details">
-                        <span><i class="fa-solid fa-bed"></i> 3 Qts</span>
-                        <span><i class="fa-solid fa-bath"></i> 2 Banheiros</span>
-                        <span><i class="fa-solid fa-car"></i> 2 Vagas</span>
-                    </div>
-                    <a href="imovel.html?id=1" class="btn-card">Ver Detalhes</a>
-                </div>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="card" data-tipo="apartamento" data-bairro="centro" data-preco="1800" data-negocio="aluguel">
-                <div class="card-tag tag-aluguel">Aluguel</div>
-                <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500" alt="Apartamento Moderno">
-                <div class="card-body">
-                    <span class="card-price">R$ 1.800 <small>/mês</small></span>
-                    <h3>Apartamento Moderno no Centro</h3>
-                    <p class="card-location"><i class="fa-solid fa-location-dot"></i> Centro</p>
-                    <div class="card-details">
-                        <span><i class="fa-solid fa-bed"></i> 2 Qts</span>
-                        <span><i class="fa-solid fa-bath"></i> 1 Banheiro</span>
-                        <span><i class="fa-solid fa-car"></i> 1 Vaga</span>
-                    </div>
-                    <a href="imovel.html?id=2" class="btn-card">Ver Detalhes</a>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="card" data-tipo="casa" data-bairro="jardimestados" data-preco="890000" data-negocio="venda">
-                <div class="card-tag">Venda</div>
-                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=500" alt="Casa em Condomínio">
-                <div class="card-body">
-                    <span class="card-price">R$ 890.000</span>
-                    <h3>Casa em Condomínio Fechado</h3>
-                    <p class="card-location"><i class="fa-solid fa-location-dot"></i> Jardim dos Estados</p>
-                    <div class="card-details">
-                        <span><i class="fa-solid fa-bed"></i> 4 Qts</span>
-                        <span><i class="fa-solid fa-bath"></i> 3 Banheiros</span>
-                        <span><i class="fa-solid fa-car"></i> 3 Vagas</span>
-                    </div>
-                    <a href="imovel.html?id=3" class="btn-card">Ver Detalhes</a>
-                </div>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="card" data-tipo="apartamento" data-bairro="santarosalia" data-preco="320000" data-negocio="venda">
-                <div class="card-tag">Venda</div>
-                <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500" alt="Apartamento 2 Quartos">
-                <div class="card-body">
-                    <span class="card-price">R$ 320.000</span>
-                    <h3>Apartamento 2 Quartos com Varanda</h3>
-                    <p class="card-location"><i class="fa-solid fa-location-dot"></i> Bairro Santa Rosália</p>
-                    <div class="card-details">
-                        <span><i class="fa-solid fa-bed"></i> 2 Qts</span>
-                        <span><i class="fa-solid fa-bath"></i> 2 Banheiros</span>
-                        <span><i class="fa-solid fa-car"></i> 1 Vaga</span>
-                    </div>
-                    <a href="imovel.html?id=4" class="btn-card">Ver Detalhes</a>
-                </div>
-            </div>
-
-            <!-- Card 5 -->
-            <div class="card" data-tipo="casa" data-bairro="centro" data-preco="2500" data-negocio="aluguel">
-                <div class="card-tag tag-aluguel">Aluguel</div>
-                <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500" alt="Casa Térrea">
-                <div class="card-body">
-                    <span class="card-price">R$ 2.500 <small>/mês</small></span>
-                    <h3>Casa Térrea com Quintal</h3>
-                    <p class="card-location"><i class="fa-solid fa-location-dot"></i> Centro</p>
-                    <div class="card-details">
-                        <span><i class="fa-solid fa-bed"></i> 3 Qts</span>
-                        <span><i class="fa-solid fa-bath"></i> 2 Banheiros</span>
-                        <span><i class="fa-solid fa-car"></i> 2 Vagas</span>
-                    </div>
-                    <a href="imovel.html?id=5" class="btn-card">Ver Detalhes</a>
-                </div>
-            </div>
-
-            <!-- Card 6 -->
-            <div class="card" data-tipo="apartamento" data-bairro="jardimestados" data-preco="420000" data-negocio="venda">
-                <div class="card-tag">Venda</div>
-                <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=500" alt="Apartamento Garden">
-                <div class="card-body">
-                    <span class="card-price">R$ 420.000</span>
-                    <h3>Apartamento Garden com Área Gourmet</h3>
-                    <p class="card-location"><i class="fa-solid fa-location-dot"></i> Jardim dos Estados</p>
-                    <div class="card-details">
-                        <span><i class="fa-solid fa-bed"></i> 3 Qts</span>
-                        <span><i class="fa-solid fa-bath"></i> 2 Banheiros</span>
-                        <span><i class="fa-solid fa-car"></i> 2 Vagas</span>
-                    </div>
-                    <a href="imovel.html?id=6" class="btn-card">Ver Detalhes</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mensagem de nenhum resultado -->
-        <p id="sem-resultados" style="display:none;text-align:center;padding:40px;color:#718096;font-size:16px;">
-            😕 Nenhum imóvel encontrado com esses filtros.
-        </p>
+        <div class="cards-grid"></div>
+        <p id="sem-resultados" style="display:none;text-align:center;padding:40px;color:#718096;">😕 Nenhum imóvel encontrado.</p>
     </section>
 
-    <!-- 4. SOBRE -->
     <section class="sobre container" id="sobre">
         <div class="sobre-grid">
             <div class="sobre-texto">
                 <h2>Por que escolher a Sua Casa Imóveis?</h2>
-                <p>Há mais de 10 anos conectando pessoas ao imóvel ideal, com atendimento humanizado e transparência em cada negociação.</p>
-                <ul class="sobre-lista">
-                    <li><i class="fa-solid fa-check"></i> Consultores especializados</li>
-                    <li><i class="fa-solid fa-check"></i> Documentação segura e assessoria jurídica</li>
-                    <li><i class="fa-solid fa-check"></i> Melhores taxas de financiamento</li>
-                    <li><i class="fa-solid fa-check"></i> Tour virtual em todos os imóveis</li>
-                </ul>
-            </div>
-            <div class="sobre-stats">
-                <div class="stat"><strong>500+</strong><span>Imóveis vendidos</span></div>
-                <div class="stat"><strong>10</strong><span>Anos de mercado</span></div>
-                <div class="stat"><strong>1.2k</strong><span>Clientes felizes</span></div>
-                <div class="stat"><strong>98%</strong><span>Satisfação</span></div>
+                <p>Há mais de 10 anos conectando pessoas ao imóvel ideal, com atendimento humanizado e transparência.</p>
             </div>
         </div>
     </section>
 
-    <!-- 5. CONTATO -->
     <section class="contato" id="contato">
         <div class="container contato-grid">
             <div class="contato-info">
                 <h2>Fale Conosco</h2>
-                <p>Atendimento de segunda a sábado, das 8h às 18h.</p>
                 <p><i class="fa-solid fa-phone"></i> (11) 99999-9999</p>
-                <p><i class="fa-solid fa-envelope"></i> contato@suacasa.com.br</p>
-                <p><i class="fa-solid fa-location-dot"></i> Av. Central, 1000 — Centro</p>
-                <div class="redes">
-                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
-                </div>
             </div>
             <form class="contato-form">
                 <input type="text" placeholder="Seu nome" required>
                 <input type="email" placeholder="Seu e-mail" required>
-                <input type="tel" placeholder="Telefone / WhatsApp">
-                <textarea rows="4" placeholder="Mensagem"></textarea>
+                <input type="tel" id="telefone-contato" placeholder="(11) 99999-9999" maxlength="15" required>
+                <textarea rows="4" placeholder="Mensagem" required></textarea>
                 <button type="submit" class="btn-search">Enviar mensagem</button>
             </form>
         </div>
     </section>
 
-    <!-- 6. FOOTER -->
     <footer class="footer">
         <div class="container footer-grid">
-            <div>
-                <a href="index.html" class="logo" style="color:#fff">Sua Casa <span>Imóveis</span></a>
-                <p>Realizando sonhos, um imóvel de cada vez.</p>
-            </div>
-            <div>
-                <h4>Navegação</h4>
-                <a href="#home">Início</a>
-                <a href="#destaques">Destaques</a>
-                <a href="#sobre">Sobre</a>
-                <a href="#contato">Contato</a>
-            </div>
-            <div>
-                <h4>CRECI</h4>
-                <p>CRECI-SP 00000-J</p>
-                <p>© 2025 Sua Casa Imóveis</p>
-            </div>
+            <div><a href="index.html" class="logo" style="color:#fff">Sua Casa <span>Imóveis</span></a></div>
+            <div><h4>Navegação</h4><a href="index.html">Início</a><a href="imoveis.html">Todos os Imóveis</a></div>
         </div>
     </footer>
-
-    <!-- 7. BOTÃO FLUTUANTE DO WHATSAPP -->
-    <a href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Vi%20o%20site%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es."
-       class="whatsapp-float" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+    
+    <!-- BOTÃO DO WHATSAPP FLUTUANTE (TROQUE O NÚMERO ABAIXO) -->
+    <a href="https://wa.me/5521987654321?text=Ol%C3%A1!%20Vi%20o%20site%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." class="whatsapp-float" target="_blank" rel="noopener">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
-
-    <!-- SCRIPT -->
+    
     <script src="js/script.js"></script>
-
 </body>
 </html>
