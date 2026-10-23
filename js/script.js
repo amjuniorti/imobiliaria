@@ -22,12 +22,12 @@ document.querySelectorAll('.type-btn').forEach(btn => {
         btn.classList.add('active');
         tipoNegocio = btn.dataset.type;
 
-        // Re-filtra automaticamente se já houver algum filtro ativo
-        if (temFiltroAtivo()) filtrarImoveis();
+        // Re-filtra automaticamente se já houver algum filtro ativo (sem rolar a tela)
+        if (temFiltroAtivo()) filtrarImoveis(false);
     });
 });
 
-// ====== 2. FUNÇÃO AUXILIAR: tem filtro? ======
+// ====== 2. FUNÇÃO AUXILIAR: tem filtro ativo? ======
 function temFiltroAtivo() {
     return (
         document.getElementById('tipo').value   !== '' ||
@@ -37,7 +37,8 @@ function temFiltroAtivo() {
 }
 
 // ====== 3. FILTRO PRINCIPAL ======
-function filtrarImoveis() {
+// O parâmetro "rolar" define se a tela vai descer ou não ao filtrar
+function filtrarImoveis(rolar = false) {
     const tipo    = document.getElementById('tipo').value.toLowerCase();
     const bairro  = document.getElementById('bairro').value.toLowerCase();
     const preco   = parseFloat(document.getElementById('preco').value) || Infinity;
@@ -62,31 +63,35 @@ function filtrarImoveis() {
         }
     });
 
-    // Contador
+    // Atualiza o contador
     contador.textContent = encontrados === 1
         ? '1 imóvel encontrado'
         : `${encontrados} imóveis encontrados`;
 
-    // Mensagem de nenhum resultado
+    // Mostra ou esconde a mensagem de "nenhum resultado"
     semResultados.style.display = encontrados === 0 ? '' : 'none';
 
-    // Rola suavemente até os destaques
-    document.getElementById('destaques').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Só rola a tela se a ação veio de um clique no botão "Buscar"
+    if (rolar) {
+        document.getElementById('destaques').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 // ====== 4. EVENTOS DE BUSCA ======
-btnBuscar.addEventListener('click', filtrarImoveis);
 
-// Buscar também ao apertar Enter no formulário
+// Clicou no botão "Buscar" -> filtra E rola a tela
+btnBuscar.addEventListener('click', () => filtrarImoveis(true));
+
+// Apertou Enter no formulário -> filtra E rola a tela
 formBusca.addEventListener('submit', e => {
     e.preventDefault();
-    filtrarImoveis();
+    filtrarImoveis(true);
 });
 
-// Re-filtra automaticamente ao mudar selects/input (só se já houver filtro)
+// Mudou os selects ou digitou o preço -> filtra AO VIVO (sem rolar a tela)
 ['tipo', 'bairro', 'preco'].forEach(id => {
     document.getElementById(id).addEventListener('input', () => {
-        if (temFiltroAtivo()) filtrarImoveis();
+        if (temFiltroAtivo()) filtrarImoveis(false);
     });
 });
 
@@ -95,30 +100,37 @@ btnLimpar.addEventListener('click', () => {
     formBusca.reset();
     tipoNegocio = 'venda';
 
+    // Reseta as abas
     document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
     document.querySelector('.type-btn[data-type="venda"]').classList.add('active');
 
-    // Mostra todos os cards
+    // Mostra todos os cards novamente
     cards.forEach(card => card.style.display = '');
+    
+    // Reseta o contador
     contador.textContent = cards.length === 1
         ? '1 imóvel encontrado'
         : `${cards.length} imóveis encontrados`;
+        
     semResultados.style.display = 'none';
 
+    // Rola de volta para o topo dos imóveis
     document.getElementById('destaques').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
 // ====== 6. MENU HAMBURGUER ======
-menuToggle.addEventListener('click', () => {
-    nav.classList.toggle('aberto');
-});
-
-// Fecha o menu ao clicar em um link
-document.querySelectorAll('.nav a').forEach(link => {
-    link.addEventListener('click', () => {
-        nav.classList.remove('aberto');
+if (menuToggle && nav) {
+    menuToggle.addEventListener('click', () => {
+        nav.classList.toggle('aberto');
     });
-});
+
+    // Fecha o menu ao clicar em um link
+    document.querySelectorAll('.nav a').forEach(link => {
+        link.addEventListener('click', () => {
+            nav.classList.remove('aberto');
+        });
+    });
+}
 
 // ====== 7. CONTADOR INICIAL ======
 // Mostra o total de cards ao carregar a página
