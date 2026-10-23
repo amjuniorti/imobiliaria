@@ -21,7 +21,13 @@
     <header class="header">
         <div class="container nav-container">
             <a href="#" class="logo">Sua Casa <span>Imóveis</span></a>
-            <nav class="nav">
+
+            <!-- Botão hamburguer (mobile) -->
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <nav class="nav" id="nav">
                 <a href="#home">Início</a>
                 <a href="#destaques">Destaques</a>
                 <a href="#sobre">Sobre</a>
@@ -85,6 +91,14 @@
         <h2>Imóveis em Destaque</h2>
         <p class="subtitle">Confira as melhores oportunidades selecionadas para você</p>
 
+        <!-- Contador + limpar filtros -->
+        <div class="resultado-bar" id="resultado-bar">
+            <span id="contador-resultados">6 imóveis encontrados</span>
+            <button type="button" class="btn-limpar" id="btn-limpar">
+                <i class="fa-solid fa-xmark"></i> Limpar filtros
+            </button>
+        </div>
+
         <div class="cards-grid">
             <!-- Card 1 -->
             <div class="card" data-tipo="casa" data-bairro="santarosalia" data-preco="450000" data-negocio="venda">
@@ -136,7 +150,63 @@
                     <a href="#" class="btn-card">Ver Detalhes</a>
                 </div>
             </div>
+
+            <!-- Card 4 (NOVO) -->
+            <div class="card" data-tipo="apartamento" data-bairro="santarosalia" data-preco="320000" data-negocio="venda">
+                <div class="card-tag">Venda</div>
+                <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500" alt="Apartamento 2 Quartos">
+                <div class="card-body">
+                    <span class="card-price">R$ 320.000</span>
+                    <h3>Apartamento 2 Quartos com Varanda</h3>
+                    <p class="card-location"><i class="fa-solid fa-location-dot"></i> Bairro Santa Rosália</p>
+                    <div class="card-details">
+                        <span><i class="fa-solid fa-bed"></i> 2 Qts</span>
+                        <span><i class="fa-solid fa-bath"></i> 2 Banheiros</span>
+                        <span><i class="fa-solid fa-car"></i> 1 Vaga</span>
+                    </div>
+                    <a href="#" class="btn-card">Ver Detalhes</a>
+                </div>
+            </div>
+
+            <!-- Card 5 (NOVO) -->
+            <div class="card" data-tipo="casa" data-bairro="centro" data-preco="2500" data-negocio="aluguel">
+                <div class="card-tag tag-aluguel">Aluguel</div>
+                <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500" alt="Casa Térrea">
+                <div class="card-body">
+                    <span class="card-price">R$ 2.500 <small>/mês</small></span>
+                    <h3>Casa Térrea com Quintal</h3>
+                    <p class="card-location"><i class="fa-solid fa-location-dot"></i> Centro</p>
+                    <div class="card-details">
+                        <span><i class="fa-solid fa-bed"></i> 3 Qts</span>
+                        <span><i class="fa-solid fa-bath"></i> 2 Banheiros</span>
+                        <span><i class="fa-solid fa-car"></i> 2 Vagas</span>
+                    </div>
+                    <a href="#" class="btn-card">Ver Detalhes</a>
+                </div>
+            </div>
+
+            <!-- Card 6 (NOVO) -->
+            <div class="card" data-tipo="apartamento" data-bairro="jardimestados" data-preco="420000" data-negocio="venda">
+                <div class="card-tag">Venda</div>
+                <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=500" alt="Apartamento Garden">
+                <div class="card-body">
+                    <span class="card-price">R$ 420.000</span>
+                    <h3>Apartamento Garden com Área Gourmet</h3>
+                    <p class="card-location"><i class="fa-solid fa-location-dot"></i> Jardim dos Estados</p>
+                    <div class="card-details">
+                        <span><i class="fa-solid fa-bed"></i> 3 Qts</span>
+                        <span><i class="fa-solid fa-bath"></i> 2 Banheiros</span>
+                        <span><i class="fa-solid fa-car"></i> 2 Vagas</span>
+                    </div>
+                    <a href="#" class="btn-card">Ver Detalhes</a>
+                </div>
+            </div>
         </div>
+
+        <!-- Mensagem de nenhum resultado -->
+        <p id="sem-resultados" style="display:none;text-align:center;padding:40px;color:#718096;font-size:16px;">
+            😕 Nenhum imóvel encontrado com esses filtros.
+        </p>
     </section>
 
     <!-- 4. SOBRE -->
@@ -171,9 +241,9 @@
                 <p><i class="fa-solid fa-envelope"></i> contato@suacasa.com.br</p>
                 <p><i class="fa-solid fa-location-dot"></i> Av. Central, 1000 — Centro</p>
                 <div class="redes">
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
-                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
                 </div>
             </div>
             <form class="contato-form">
@@ -207,6 +277,12 @@
             </div>
         </div>
     </footer>
+
+    <!-- 7. BOTÃO FLUTUANTE DO WHATSAPP -->
+    <a href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Vi%20o%20site%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es."
+       class="whatsapp-float" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
 
     <script src="js/script.js"></script>
 

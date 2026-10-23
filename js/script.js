@@ -1,21 +1,46 @@
+/* ========================================
+   SUA CASA IMÓVEIS - SCRIPT PRINCIPAL
+   ======================================== */
+
 // ====== ESTADO ======
 let tipoNegocio = 'venda'; // 'venda' ou 'aluguel'
 
-// ====== BOTÕES COMPRAR / ALUGAR ======
+// ====== ELEMENTOS ======
+const cards          = document.querySelectorAll('.card');
+const btnBuscar      = document.getElementById('btn-buscar');
+const btnLimpar      = document.getElementById('btn-limpar');
+const formBusca      = document.getElementById('form-busca');
+const contador       = document.getElementById('contador-resultados');
+const semResultados  = document.getElementById('sem-resultados');
+const menuToggle     = document.getElementById('menu-toggle');
+const nav            = document.getElementById('nav');
+
+// ====== 1. ABAS COMPRAR / ALUGAR ======
 document.querySelectorAll('.type-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         tipoNegocio = btn.dataset.type;
+
+        // Re-filtra automaticamente se já houver algum filtro ativo
+        if (temFiltroAtivo()) filtrarImoveis();
     });
 });
 
-// ====== FUNÇÃO DE FILTRO ======
+// ====== 2. FUNÇÃO AUXILIAR: tem filtro? ======
+function temFiltroAtivo() {
+    return (
+        document.getElementById('tipo').value   !== '' ||
+        document.getElementById('bairro').value !== '' ||
+        document.getElementById('preco').value  !== ''
+    );
+}
+
+// ====== 3. FILTRO PRINCIPAL ======
 function filtrarImoveis() {
     const tipo    = document.getElementById('tipo').value.toLowerCase();
     const bairro  = document.getElementById('bairro').value.toLowerCase();
     const preco   = parseFloat(document.getElementById('preco').value) || Infinity;
-    const cards   = document.querySelectorAll('.card');
     let encontrados = 0;
 
     cards.forEach(card => {
@@ -37,49 +62,66 @@ function filtrarImoveis() {
         }
     });
 
-    // Mensagem de "nenhum resultado"
-    let msg = document.getElementById('sem-resultados');
-    if (encontrados === 0) {
-        if (!msg) {
-            msg = document.createElement('p');
-            msg.id = 'sem-resultados';
-            msg.style.cssText = 'text-align:center;padding:40px;color:#718096;font-size:16px;';
-            msg.innerHTML = '😕 Nenhum imóvel encontrado com esses filtros. <a href="#" id="limpar-filtros" style="color:#2b6cb0;">Limpar filtros</a>';
-            document.querySelector('.cards-grid').after(msg);
-            document.getElementById('limpar-filtros').addEventListener('click', e => {
-                e.preventDefault();
-                document.getElementById('form-busca').reset();
-                tipoNegocio = 'venda';
-                document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
-                document.querySelector('.type-btn[data-type="venda"]').classList.add('active');
-                filtrarImoveis();
-            });
-        }
-        msg.style.display = '';
-    } else if (msg) {
-        msg.style.display = 'none';
-    }
+    // Contador
+    contador.textContent = encontrados === 1
+        ? '1 imóvel encontrado'
+        : `${encontrados} imóveis encontrados`;
 
-    // Rola para os destaques
-    document.getElementById('destaques').scrollIntoView({ behavior: 'smooth' });
+    // Mensagem de nenhum resultado
+    semResultados.style.display = encontrados === 0 ? '' : 'none';
+
+    // Rola suavemente até os destaques
+    document.getElementById('destaques').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ====== EVENTOS ======
-document.getElementById('btn-buscar').addEventListener('click', filtrarImoveis);
+// ====== 4. EVENTOS DE BUSCA ======
+btnBuscar.addEventListener('click', filtrarImoveis);
 
-// Buscar também ao pressionar Enter
-document.getElementById('form-busca').addEventListener('submit', e => {
+// Buscar também ao apertar Enter no formulário
+formBusca.addEventListener('submit', e => {
     e.preventDefault();
     filtrarImoveis();
 });
 
-// Re-filtrar automaticamente ao trocar Comprar/Alugar
-document.querySelectorAll('.type-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        // só re-filtra se já houver filtro ativo
-        const temFiltro = document.getElementById('tipo').value ||
-                          document.getElementById('bairro').value ||
-                          document.getElementById('preco').value;
-        if (temFiltro) filtrarImoveis();
+// Re-filtra automaticamente ao mudar selects/input (só se já houver filtro)
+['tipo', 'bairro', 'preco'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
+        if (temFiltroAtivo()) filtrarImoveis();
     });
 });
+
+// ====== 5. BOTÃO LIMPAR FILTROS ======
+btnLimpar.addEventListener('click', () => {
+    formBusca.reset();
+    tipoNegocio = 'venda';
+
+    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.type-btn[data-type="venda"]').classList.add('active');
+
+    // Mostra todos os cards
+    cards.forEach(card => card.style.display = '');
+    contador.textContent = cards.length === 1
+        ? '1 imóvel encontrado'
+        : `${cards.length} imóveis encontrados`;
+    semResultados.style.display = 'none';
+
+    document.getElementById('destaques').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+// ====== 6. MENU HAMBURGUER ======
+menuToggle.addEventListener('click', () => {
+    nav.classList.toggle('aberto');
+});
+
+// Fecha o menu ao clicar em um link
+document.querySelectorAll('.nav a').forEach(link => {
+    link.addEventListener('click', () => {
+        nav.classList.remove('aberto');
+    });
+});
+
+// ====== 7. CONTADOR INICIAL ======
+// Mostra o total de cards ao carregar a página
+contador.textContent = cards.length === 1
+    ? '1 imóvel encontrado'
+    : `${cards.length} imóveis encontrados`;

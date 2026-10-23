@@ -310,3 +310,135 @@ body {
     .hero h1 { font-size: 26px; }
     .sobre-grid, .contato-grid { grid-template-columns: 1fr; }
 }
+
+/* ========================================
+   MELHORIAS: CONTADOR, MENU MOBILE,
+   WHATSAPP FLUTUANTE
+   ======================================== */
+
+/* -------- BARRA DE RESULTADOS -------- */
+.resultado-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 25px;
+    padding: 12px 18px;
+    background: #edf2f7;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #4a5568;
+}
+
+#contador-resultados {
+    font-weight: 600;
+    color: #1a365d;
+}
+
+.btn-limpar {
+    background: transparent;
+    border: 1px solid #cbd5e0;
+    color: #4a5568;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-limpar:hover {
+    background: #2b6cb0;
+    color: #fff;
+    border-color: #2b6cb0;
+}
+
+/* -------- BOTÃO HAMBURGUER -------- */
+.menu-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: #1a365d;
+    cursor: pointer;
+    padding: 8px;
+}
+
+/* -------- MENU MOBILE -------- */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: #fff;
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        gap: 15px;
+        z-index: 99;
+    }
+
+    .nav.aberto {
+        display: flex;
+    }
+
+    .nav a {
+        margin-left: 0;
+        padding: 8px 0;
+        border-bottom: 1px solid #edf2f7;
+    }
+
+    .nav .btn-contato {
+        text-align: center;
+        margin-top: 10px;
+    }
+}
+
+/* -------- WHATSAPP FLUTUANTE -------- */
+.whatsapp-float {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 60px;
+    height: 60px;
+    background: #25d366;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 6px 18px rgba(37, 211, 102, 0.5);
+    z-index: 999;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: pulse-whatsapp 2s infinite;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 22px rgba(37, 211, 102, 0.7);
+}
+
+@keyframes pulse-whatsapp {
+    0%, 100% { box-shadow: 0 6px 18px rgba(37, 211, 102, 0.5); }
+    50% { box-shadow: 0 6px 25px rgba(37, 211, 102, 0.85); }
+}
+
+/* Em telas bem pequenas, diminui o botão */
+@media (max-width: 480px) {
+    .whatsapp-float {
+        width: 52px;
+        height: 52px;
+        font-size: 28px;
+        bottom: 18px;
+        right: 18px;
+    }
+}
