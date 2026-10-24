@@ -8,22 +8,52 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        /* ========================================
+           ESTILOS DO PAINEL LATERAL (REFINAR PESQUISA)
+           ======================================== */
+        .overlay-filtros { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+        .overlay-filtros.ativo { opacity: 1; visibility: visible; }
+        .painel-filtros { position: fixed; top: 0; right: -420px; width: 100%; max-width: 420px; height: 100vh; background: var(--bg-card); z-index: 1001; box-shadow: -10px 0 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .painel-filtros.aberto { right: 0; }
+        .painel-header { display: flex; justify-content: space-between; align-items: center; padding: 25px; border-bottom: 1px solid var(--border-color); background: var(--bg-body); }
+        .painel-header h2 { font-size: 20px; color: var(--text-main); font-weight: 800; margin: 0; }
+        .btn-fechar-filtros { background: transparent; border: none; font-size: 24px; color: var(--text-muted); cursor: pointer; transition: color 0.2s; }
+        .btn-fechar-filtros:hover { color: #ef4444; }
+        .painel-corpo { padding: 25px; overflow-y: auto; flex: 1; }
+        .grupo-filtro { margin-bottom: 25px; }
+        .grupo-filtro label { display: block; font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 10px; }
+        .input-busca-painel { width: 100%; padding: 14px 16px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-body); color: var(--text-main); outline: none; font-size: 15px; transition: border 0.2s; }
+        .input-busca-painel:focus { border-color: var(--primary-color); }
+        .botoes-operacao { display: flex; gap: 10px; }
+        .btn-op { flex: 1; padding: 14px; border: 1px solid var(--border-color); background: transparent; color: var(--text-muted); border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .btn-op.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+        .input-row-painel { display: flex; gap: 15px; }
+        .input-row-painel > div { flex: 1; }
+        .input-row-painel input { width: 100%; padding: 14px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-body); color: var(--text-main); outline: none; font-size: 15px; }
+        .painel-footer { padding: 25px; border-top: 1px solid var(--border-color); display: flex; gap: 15px; background: var(--bg-card); box-shadow: 0 -10px 20px rgba(0,0,0,0.05); }
+        .btn-limpar-painel { flex: 1; padding: 16px; background: transparent; border: 2px solid var(--border-color); border-radius: 10px; color: var(--text-muted); font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .btn-limpar-painel:hover { border-color: #ef4444; color: #ef4444; }
+        .btn-aplicar-painel { flex: 2; padding: 16px; background: var(--primary-color); color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 16px; transition: all 0.2s; }
+        .btn-aplicar-painel:hover { background: #1e3a8a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(43, 108, 176, 0.3); }
+        .btn-group-qtd { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn-qtd { flex: 1; min-width: 50px; padding: 12px 0; border: 1px solid var(--border-color); background: transparent; color: var(--text-muted); border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.2s; }
+        .btn-qtd:hover { border-color: var(--primary-color); color: var(--primary-color); }
+        .btn-qtd.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+    </style>
 </head>
 <body>
 
     <header class="header">
         <div class="container nav-container">
             <a href="index.html" class="logo">Sua Casa <span>Imóveis</span></a>
-            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
-                <i class="fa-solid fa-bars"></i>
-            </button>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
             <nav class="nav" id="nav">
                 <a href="index.html">Início</a>
-                <a href="imoveis.html">Todos os Imóveis</a>
+                <a href="imoveis.html">Imóveis</a>
                 <a href="#sobre">Sobre</a>
-                <button class="btn-tema" id="btn-tema" aria-label="Alternar Tema">
-                    <i class="fa-solid fa-moon" id="icone-tema"></i>
-                </button>
+                <button class="btn-tema" id="btn-tema" aria-label="Alternar Tema"><i class="fa-solid fa-moon" id="icone-tema"></i></button>
                 <a href="#contato" class="btn-contato">Fale Conosco</a>
             </nav>
         </div>
@@ -34,12 +64,13 @@
             <div class="container">
                 <h1>Encontre o imóvel dos seus sonhos</h1>
                 <p>As melhores opções de compra e aluguel na região</p>
-                
+
                 <form class="search-box" id="form-busca" onsubmit="return false;">
                     <div class="search-type">
                         <button type="button" class="type-btn active" data-type="venda">Comprar</button>
                         <button type="button" class="type-btn" data-type="aluguel">Alugar</button>
                     </div>
+                    
                     <div class="search-fields">
                         <div class="field">
                             <label for="tipo"><i class="fa-solid fa-house"></i> Tipo</label>
@@ -53,22 +84,110 @@
                             <label for="preco"><i class="fa-solid fa-dollar-sign"></i> Valor Máximo</label>
                             <input type="number" id="preco" placeholder="R$ Até quanto?">
                         </div>
-                        <button type="button" class="btn-search" id="btn-buscar">
-                            <i class="fa-solid fa-magnifying-glass"></i> Buscar
-                        </button>
+                        
+                        <div class="botoes-busca">
+                            <button type="button" class="btn-search" id="btn-buscar">
+                                <i class="fa-solid fa-magnifying-glass"></i> Buscar
+                            </button>
+                            <button type="button" class="btn-refinar" id="btn-abrir-filtros">
+                                <i class="fa-solid fa-sliders"></i> Refinar
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
     </section>
 
+    <!-- PAINEL LATERAL DE FILTROS -->
+    <div id="overlay-filtros" class="overlay-filtros"></div>
+    <aside id="painel-filtros" class="painel-filtros">
+        <div class="painel-header">
+            <h2>Refinar Pesquisa</h2>
+            <button id="btn-fechar-filtros" class="btn-fechar-filtros"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div class="painel-corpo">
+            <div class="grupo-filtro">
+                <label>Busca Livre</label>
+                <input type="text" id="painel-busca-livre" class="input-busca-painel" placeholder="Título, bairro ou código...">
+            </div>
+            <div class="grupo-filtro">
+                <label>Operação</label>
+                <div class="botoes-operacao">
+                    <button type="button" class="btn-op active" data-type="venda">Comprar</button>
+                    <button type="button" class="btn-op" data-type="aluguel">Alugar</button>
+                </div>
+            </div>
+            <div class="grupo-filtro">
+                <label>Valor do Imóvel (R$)</label>
+                <div class="input-row-painel">
+                    <div><input type="number" id="painel-preco-min" placeholder="Mínimo"></div>
+                    <div><input type="number" id="painel-preco-max" placeholder="Máximo"></div>
+                </div>
+            </div>
+            <div class="grupo-filtro">
+                <label>Tipo de Imóvel</label>
+                <select id="painel-tipo" class="input-busca-painel"><option value="">Todos os Tipos</option></select>
+            </div>
+            <div class="grupo-filtro">
+                <label>Bairro</label>
+                <select id="painel-bairro" class="input-busca-painel"><option value="">Todos os Bairros</option></select>
+            </div>
+            <div class="grupo-filtro">
+                <label>Quartos</label>
+                <div class="btn-group-qtd" id="filtro-quartos">
+                    <button type="button" class="btn-qtd active" data-val="0">Todos</button>
+                    <button type="button" class="btn-qtd" data-val="1">1+</button>
+                    <button type="button" class="btn-qtd" data-val="2">2+</button>
+                    <button type="button" class="btn-qtd" data-val="3">3+</button>
+                    <button type="button" class="btn-qtd" data-val="4">4+</button>
+                </div>
+            </div>
+            <div class="grupo-filtro">
+                <label>Suítes</label>
+                <div class="btn-group-qtd" id="filtro-suites">
+                    <button type="button" class="btn-qtd active" data-val="0">Todas</button>
+                    <button type="button" class="btn-qtd" data-val="1">1+</button>
+                    <button type="button" class="btn-qtd" data-val="2">2+</button>
+                    <button type="button" class="btn-qtd" data-val="3">3+</button>
+                </div>
+            </div>
+            <div class="grupo-filtro">
+                <label>Banheiros</label>
+                <div class="btn-group-qtd" id="filtro-banheiros">
+                    <button type="button" class="btn-qtd active" data-val="0">Todos</button>
+                    <button type="button" class="btn-qtd" data-val="1">1+</button>
+                    <button type="button" class="btn-qtd" data-val="2">2+</button>
+                    <button type="button" class="btn-qtd" data-val="3">3+</button>
+                </div>
+            </div>
+            <div class="grupo-filtro">
+                <label>Vagas na Garagem</label>
+                <div class="btn-group-qtd" id="filtro-vagas">
+                    <button type="button" class="btn-qtd active" data-val="0">Todas</button>
+                    <button type="button" class="btn-qtd" data-val="1">1+</button>
+                    <button type="button" class="btn-qtd" data-val="2">2+</button>
+                    <button type="button" class="btn-qtd" data-val="3">3+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="painel-footer">
+            <button type="button" id="btn-limpar-painel" class="btn-limpar-painel">Limpar</button>
+            <button type="button" id="btn-aplicar-painel" class="btn-aplicar-painel">Filtrar</button>
+        </div>
+    </aside>
+
     <section class="destaques container" id="destaques">
         <h2>Imóveis em Destaque</h2>
         <p class="subtitle">Confira as melhores oportunidades selecionadas para você</p>
+        
         <div class="resultado-bar" id="resultado-bar">
             <span id="contador-resultados">Carregando...</span>
-            <button type="button" class="btn-limpar" id="btn-limpar"><i class="fa-solid fa-xmark"></i> Limpar filtros</button>
+            <button type="button" class="btn-limpar" id="btn-limpar-rapido" style="display: none;"><i class="fa-solid fa-xmark"></i> Limpar filtros</button>
         </div>
+        
         <div class="cards-grid"></div>
         <p id="sem-resultados" style="display:none;text-align:center;padding:40px;color:#718096;">😕 Nenhum imóvel encontrado.</p>
     </section>
@@ -89,10 +208,10 @@
                 <p><i class="fa-solid fa-phone"></i> (11) 99999-9999</p>
             </div>
             <form class="contato-form">
-                <input type="text" placeholder="Seu nome" required>
-                <input type="email" placeholder="Seu e-mail" required>
-                <input type="tel" id="telefone-contato" placeholder="(11) 99999-9999" maxlength="15" required>
-                <textarea rows="4" placeholder="Mensagem" required></textarea>
+                <input type="text" name="nome" placeholder="Seu nome" required>
+                <input type="email" name="email" placeholder="Seu e-mail" required>
+                <input type="tel" name="telefone" id="telefone-contato" placeholder="(11) 99999-9999" maxlength="15" required>
+                <textarea name="mensagem" rows="4" placeholder="Mensagem" required></textarea>
                 <button type="submit" class="btn-search">Enviar mensagem</button>
             </form>
         </div>
@@ -101,15 +220,13 @@
     <footer class="footer">
         <div class="container footer-grid">
             <div><a href="index.html" class="logo" style="color:#fff">Sua Casa <span>Imóveis</span></a></div>
-            <div><h4>Navegação</h4><a href="index.html">Início</a><a href="imoveis.html">Todos os Imóveis</a></div>
+            <div><h4>Navegação</h4><a href="index.html">Início</a><a href="imoveis.html">Imóveis</a></div>
         </div>
     </footer>
-    
-    <!-- BOTÃO DO WHATSAPP FLUTUANTE (TROQUE O NÚMERO ABAIXO) -->
-    <a href="https://wa.me/5521987654321?text=Ol%C3%A1!%20Vi%20o%20site%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." class="whatsapp-float" target="_blank" rel="noopener">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
-    
+
+    <a href="https://wa.me/5521987654321" class="whatsapp-float" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+    <button id="btn-voltar-topo" class="btn-topo" aria-label="Voltar ao topo"><i class="fa-solid fa-arrow-up"></i></button>
+
     <script src="js/script.js"></script>
 </body>
 </html>

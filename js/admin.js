@@ -1,5 +1,5 @@
 /* ========================================
-   ADMIN - LÓGICA COMPLETA E TEMA
+   ADMIN - LÓGICA COMPLETA, TEMA E MENU
    ======================================== */
 
 const SUPABASE_URL = 'https://hkqnpvixhrdorugcavtl.supabase.co';
@@ -8,7 +8,6 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const { createClient } = supabase;
 const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: true } });
 
-// Elementos
 const telaLogin = document.getElementById('tela-login');
 const painelAdmin = document.getElementById('painel-admin');
 const formImovel = document.getElementById('form-imovel');
@@ -18,17 +17,26 @@ const fotosAtuaisContainer = document.getElementById('fotos-atuais');
 const inputImagem = document.getElementById('imagem');
 const btnSair = document.getElementById('btn-sair');
 
-// Variáveis de estado
 let todosImoveisAdmin = [];
-let fotosEmEdicao = []; 
+let fotosEmEdicao = [];
 
-// ====== TEMA CLARO / ESCURO ======
+// ====== MENU HAMBURGUER ======
+const menuToggle = document.getElementById('menu-toggle');
+const nav = document.getElementById('nav');
+if (menuToggle && nav) {
+    menuToggle.addEventListener('click', () => nav.classList.toggle('aberto'));
+    document.querySelectorAll('.nav a').forEach(link => {
+        link.addEventListener('click', () => nav.classList.remove('aberto'));
+    });
+}
+
+// ====== TEMA ======
 const btnTema = document.getElementById('btn-tema');
 const iconeTema = document.getElementById('icone-tema');
 
 if (localStorage.getItem('tema') === 'dark') {
     document.body.classList.add('dark-mode');
-    if(iconeTema) { iconeTema.classList.remove('fa-moon'); iconeTema.classList.add('fa-sun'); }
+    if (iconeTema) { iconeTema.classList.remove('fa-moon'); iconeTema.classList.add('fa-sun'); }
 }
 
 if (btnTema) {
@@ -36,10 +44,12 @@ if (btnTema) {
         document.body.classList.toggle('dark-mode');
         if (document.body.classList.contains('dark-mode')) {
             localStorage.setItem('tema', 'dark');
-            iconeTema.classList.remove('fa-moon'); iconeTema.classList.add('fa-sun');
+            iconeTema.classList.remove('fa-moon');
+            iconeTema.classList.add('fa-sun');
         } else {
             localStorage.setItem('tema', 'light');
-            iconeTema.classList.remove('fa-sun'); iconeTema.classList.add('fa-moon');
+            iconeTema.classList.remove('fa-sun');
+            iconeTema.classList.add('fa-moon');
         }
     });
 }
@@ -65,16 +75,19 @@ document.getElementById('form-login').addEventListener('submit', async (e) => {
     const email = document.getElementById('login-email').value;
     const senha = document.getElementById('login-senha').value;
     const btn = e.target.querySelector('button');
-    btn.innerHTML = 'Entrando...'; btn.disabled = true;
+    btn.innerHTML = 'Entrando...';
+    btn.disabled = true;
 
     const { error } = await _supabase.auth.signInWithPassword({ email, password: senha });
-    
+
     if (error) {
         document.getElementById('erro-login').style.display = 'block';
-        btn.innerHTML = 'Entrar no Painel'; btn.disabled = false;
+        btn.innerHTML = 'Entrar no Painel';
+        btn.disabled = false;
     } else {
         document.getElementById('erro-login').style.display = 'none';
-        btn.innerHTML = 'Entrar no Painel'; btn.disabled = false;
+        btn.innerHTML = 'Entrar no Painel';
+        btn.disabled = false;
         checarSessao();
     }
 });
@@ -100,25 +113,26 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
 // ====== BUSCAR IMÓVEIS ======
 async function carregarImoveis() {
-    listaAdmin.innerHTML = '<p>Carregando...</p>';
+    listaAdmin.innerHTML = '<p style="text-align:center;">Carregando...</p>';
     const { data, error } = await _supabase.from('imoveis').select('*').order('created_at', { ascending: false });
-    
+
     if (!error && data) {
         todosImoveisAdmin = data;
         renderizarAdminFiltrado();
     } else {
-        listaAdmin.innerHTML = '<p style="color:red;">Erro ao carregar imóveis.</p>';
+        listaAdmin.innerHTML = '<p style="color:red; text-align:center;">Erro ao carregar imóveis.</p>';
     }
 }
 
 function renderizarAdminFiltrado() {
-    const termoBusca = document.getElementById('busca-admin').value.toLowerCase();
+    const termoBusca = document.getElementById('busca-admin').value.toLowerCase().trim();
     const filtroNegocio = document.getElementById('filtro-negocio-admin').value;
 
     const filtrados = todosImoveisAdmin.filter(imovel => {
-        const bateTexto = imovel.titulo.toLowerCase().includes(termoBusca) || 
-                          imovel.bairro.toLowerCase().includes(termoBusca) ||
-                          (imovel.codigo && imovel.codigo.toLowerCase().includes(termoBusca));
+        const temCodigo = imovel.codigo ? imovel.codigo.toLowerCase().includes(termoBusca) : false;
+        const temTitulo = imovel.titulo ? imovel.titulo.toLowerCase().includes(termoBusca) : false;
+        const temBairro = imovel.bairro ? imovel.bairro.toLowerCase().includes(termoBusca) : false;
+        const bateTexto = temCodigo || temTitulo || temBairro;
         const bateNegocio = filtroNegocio === 'todos' || imovel.negocio === filtroNegocio;
         return bateTexto && bateNegocio;
     });
@@ -133,9 +147,9 @@ function renderizarAdminFiltrado() {
         const div = document.createElement('div');
         div.className = 'item-admin';
         let capa = imovel.fotos && imovel.fotos.length > 0 ? imovel.fotos[0] : 'https://via.placeholder.com/90';
-        
+
         div.innerHTML = `
-            <img src="${capa}">
+            <img src="${capa}" alt="${imovel.titulo}">
             <div class="item-admin-info">
                 <h4>${imovel.titulo} <span style="font-size:12px; color:#ed8936;">#${imovel.codigo || imovel.id}</span></h4>
                 <p>R$ ${imovel.preco.toLocaleString('pt-BR')} • ${imovel.bairro}</p>
@@ -164,7 +178,7 @@ function renderizarFotosEdicao() {
         let url = typeof item === 'string' ? item : URL.createObjectURL(item);
         const div = document.createElement('div');
         div.className = `foto-edit-container ${index === 0 ? 'capa' : ''}`;
-        
+
         let setaEsq = index > 0 ? `<button type="button" onclick="moverFotoEsquerda(${index})"><i class="fa-solid fa-chevron-left"></i></button>` : `<span></span>`;
         let setaDir = index < fotosEmEdicao.length - 1 ? `<button type="button" onclick="moverFotoDireita(${index})"><i class="fa-solid fa-chevron-right"></i></button>` : `<span></span>`;
 
@@ -182,9 +196,9 @@ function renderizarFotosEdicao() {
 
 window.previewNovasFotos = function(event) {
     const arquivos = event.target.files;
-    for (let i = 0; i < arquivos.length; i++) fotosEmEdicao.push(arquivos[i]); 
-    inputImagem.value = ''; 
-    renderizarFotosEdicao(); 
+    for (let i = 0; i < arquivos.length; i++) fotosEmEdicao.push(arquivos[i]);
+    inputImagem.value = '';
+    renderizarFotosEdicao();
 };
 
 window.removerFotoEdicao = function(index) {
@@ -209,6 +223,8 @@ window.moverFotoDireita = function(index) {
 // ====== EDITAR / SALVAR IMÓVEL ======
 window.editarImovel = function(id) {
     const imovel = todosImoveisAdmin.find(i => i.id === id);
+    if (!imovel) return;
+
     document.getElementById('imovel-id').value = imovel.id;
     document.getElementById('codigo').value = imovel.codigo || '';
     document.getElementById('titulo').value = imovel.titulo;
@@ -216,14 +232,18 @@ window.editarImovel = function(id) {
     document.getElementById('tipo').value = imovel.tipo;
     document.getElementById('bairro').value = imovel.bairro;
     document.getElementById('preco').value = imovel.preco;
-    document.getElementById('quartos').value = imovel.quartos;
-    document.getElementById('banheiros').value = imovel.banheiros;
-    document.getElementById('vagas').value = imovel.vagas;
+    
+    // CARREGANDO OS CAMPOS
+    document.getElementById('quartos').value = imovel.quartos || 0;
+    document.getElementById('suites').value = imovel.suites || 0;
+    document.getElementById('banheiros').value = imovel.banheiros || 0;
+    document.getElementById('vagas').value = imovel.vagas || 0;
+    
     document.getElementById('nota_preco').value = imovel.nota_preco || '';
     document.getElementById('descricao').value = imovel.descricao || '';
     document.getElementById('comodidades').value = imovel.comodidades || '';
-    
-    fotosEmEdicao = imovel.fotos ? [...imovel.fotos] : []; 
+
+    fotosEmEdicao = imovel.fotos ? [...imovel.fotos] : [];
     renderizarFotosEdicao();
 
     document.getElementById('form-titulo').textContent = 'Editar Imóvel';
@@ -234,7 +254,8 @@ window.editarImovel = function(id) {
 formImovel.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('btn-salvar');
-    btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
 
     try {
         const id = document.getElementById('imovel-id').value;
@@ -245,26 +266,28 @@ formImovel.addEventListener('submit', async (e) => {
             if (typeof item === 'string') {
                 urlsFinais.push(item);
             } else {
-                const nome = `${Date.now()}-${item.name}`;
+                const nome = `${Date.now()}-${Math.random().toString(36).slice(2)}-${item.name}`;
                 const { error: uploadError } = await _supabase.storage.from('fotos-imoveis').upload(nome, item);
                 if (uploadError) throw uploadError;
                 const { data } = _supabase.storage.from('fotos-imoveis').getPublicUrl(nome);
-                urlsFinais.push(data.publicUrl); 
+                urlsFinais.push(data.publicUrl);
             }
         }
 
         let codigoGerado = document.getElementById('codigo').value;
-        if (!codigoGerado) codigoGerado = 'IMV-' + Date.now().toString().slice(-6); 
+        if (!codigoGerado) codigoGerado = 'IMV-' + Date.now().toString().slice(-6);
 
+        // ENVIANDO OS DADOS INCLUINDO SUÍTES
         const dados = {
             titulo: document.getElementById('titulo').value,
             negocio: document.getElementById('negocio').value,
             tipo: document.getElementById('tipo').value,
             bairro: document.getElementById('bairro').value,
-            preco: parseInt(document.getElementById('preco').value),
-            quartos: parseInt(document.getElementById('quartos').value),
-            banheiros: parseInt(document.getElementById('banheiros').value),
-            vagas: parseInt(document.getElementById('vagas').value),
+            preco: parseInt(document.getElementById('preco').value, 10),
+            quartos: parseInt(document.getElementById('quartos').value, 10),
+            suites: parseInt(document.getElementById('suites').value, 10) || 0,
+            banheiros: parseInt(document.getElementById('banheiros').value, 10),
+            vagas: parseInt(document.getElementById('vagas').value, 10),
             nota_preco: document.getElementById('nota_preco').value,
             descricao: document.getElementById('descricao').value,
             comodidades: document.getElementById('comodidades').value,
@@ -283,11 +306,13 @@ formImovel.addEventListener('submit', async (e) => {
             alert('Imóvel cadastrado com sucesso!');
         }
 
-        resetForm(); carregarImoveis();
+        resetForm();
+        carregarImoveis();
     } catch (err) {
         alert('Erro ao salvar: ' + err.message);
     } finally {
-        btn.disabled = false; btn.innerHTML = 'Salvar Imóvel';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar Imóvel';
     }
 });
 
@@ -299,21 +324,25 @@ window.excluirImovel = async function(id) {
 };
 
 document.getElementById('btn-cancelar').addEventListener('click', resetForm);
+
 function resetForm() {
     formImovel.reset();
     document.getElementById('imovel-id').value = '';
     document.getElementById('codigo').value = '';
     document.getElementById('form-titulo').textContent = 'Adicionar Novo Imóvel';
     document.getElementById('btn-cancelar').style.display = 'none';
-    fotosEmEdicao = []; 
-    fotosAtuaisContainer.innerHTML = ''; 
+    fotosEmEdicao = [];
+    fotosAtuaisContainer.innerHTML = '';
+    
+    const btnSalvar = document.getElementById('btn-salvar');
+    if(btnSalvar) btnSalvar.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar Imóvel';
 }
 
 // ====== MENSAGENS ======
 async function carregarMensagens() {
-    listaMensagens.innerHTML = '<p>Carregando...</p>';
+    listaMensagens.innerHTML = '<p style="text-align:center;">Carregando...</p>';
     const { data } = await _supabase.from('mensagens').select('*').order('created_at', { ascending: false });
-    
+
     listaMensagens.innerHTML = '';
     if (!data || data.length === 0) {
         listaMensagens.innerHTML = '<p class="alerta-vazio">Nenhuma mensagem recebida ainda.</p>';
@@ -325,8 +354,6 @@ async function carregarMensagens() {
         div.className = 'item-admin';
         div.style.flexDirection = 'column';
         div.style.alignItems = 'flex-start';
-        
-        // Borda verde se estiver lida
         div.style.borderLeft = msg.lida ? '4px solid #38a169' : '4px solid transparent';
 
         let acoesHTML = msg.lida ? `
@@ -340,7 +367,6 @@ async function carregarMensagens() {
             </div>
         ` : `
             <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <!-- PASSO O EVENT COMO PARÂMETRO AQUI -->
                 <button onclick="marcarLida(${msg.id}, event)" class="btn-acao" style="background:#38a169; color:#fff; border:none; padding: 6px 12px; border-radius:4px; cursor:pointer;">
                     <i class="fa-solid fa-check"></i> Concluir
                 </button>
@@ -351,20 +377,18 @@ async function carregarMensagens() {
         `;
 
         div.innerHTML = `
-            <div style="width: 100%; display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <div style="width: 100%; display: flex; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 5px;">
                 <strong style="color: var(--primary-color);">${msg.nome} (${msg.email})</strong>
                 <span style="font-size: 12px; color: var(--text-muted);">${new Date(msg.created_at).toLocaleString('pt-BR')}</span>
             </div>
             <p style="margin-bottom: 10px; font-size: 14px; color: var(--text-main);">${msg.mensagem}</p>
             <p style="font-size: 12px; color: var(--text-muted);"><i class="fa-solid fa-phone"></i> ${msg.telefone || 'Não informado'}</p>
-            
             ${acoesHTML}
         `;
         listaMensagens.appendChild(div);
     });
 }
 
-// RECEBE O EVENT COMO PARÂMETRO
 window.marcarLida = async function(id, event) {
     if (event) {
         const btn = event.target.closest('.btn-acao');
@@ -374,10 +398,7 @@ window.marcarLida = async function(id, event) {
         }
     }
 
-    const { error } = await _supabase
-        .from('mensagens')
-        .update({ lida: true })
-        .eq('id', id);
+    const { error } = await _supabase.from('mensagens').update({ lida: true }).eq('id', id);
 
     if (error) {
         alert('Erro no banco de dados: ' + error.message);

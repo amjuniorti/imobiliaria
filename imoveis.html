@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todos os Imóveis | Sua Casa Imóveis</title>
+    <title>Imóveis | Sua Casa Imóveis</title>
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
     <link rel="stylesheet" href="css/style.css">
@@ -12,75 +12,74 @@
     
     <style>
         /* Hero Interno */
-        .hero-interno {
-            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat;
-            padding: 140px 0 80px;
-            text-align: center;
-            color: #fff;
-            position: relative;
-        }
-        .hero-interno h2 { font-size: 42px; font-weight: 700; margin-bottom: 10px; letter-spacing: -1px; }
+        .hero-interno { background: linear-gradient(to bottom, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat; padding: 140px 0 80px; text-align: center; color: #fff; position: relative; }
+        .hero-interno h2 { font-size: 42px; font-weight: 800; margin-bottom: 10px; letter-spacing: -1px; }
         .hero-interno p { font-size: 18px; color: #cbd5e0; }
 
-        /* Painel de Filtros */
-        .filtros-painel {
-            background: var(--bg-card, #fff);
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            padding: 30px;
-            max-width: 1000px;
-            margin: -40px auto 40px;
-            position: relative;
-            z-index: 10;
-            border: 1px solid var(--border-color, #e2e8f0);
-        }
-
-        .abas-negocio {
-            display: flex; gap: 15px; margin-bottom: 25px;
-            border-bottom: 1px solid var(--border-color, #edf2f7); padding-bottom: 20px;
-        }
-
-        .btn-aba {
-            background: transparent; border: none; padding: 10px 24px;
-            font-size: 16px; font-weight: 600; color: var(--text-muted, #718096);
-            cursor: pointer; border-radius: 8px; transition: all 0.2s;
-        }
-        .btn-aba:hover { background: var(--bg-body, #f8f9fa); color: var(--text-main, #2d3748); }
-        .btn-aba.active { background: var(--primary-color, #2b6cb0); color: #fff; box-shadow: 0 4px 12px rgba(43, 108, 176, 0.3); }
-
-        .grid-campos {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px; align-items: end;
-        }
-
+        /* Painel de Filtros Principal (que fica na tela) */
+        .filtros-painel { background: var(--bg-card); border-radius: 20px; box-shadow: var(--shadow-lg); padding: 30px; max-width: 1100px; margin: -40px auto 40px; position: relative; z-index: 10; border: 1px solid var(--border-color); }
+        .abas-negocio { display: flex; gap: 15px; margin-bottom: 25px; border-bottom: 2px solid var(--border-color); padding-bottom: 20px; }
+        .btn-aba { background: transparent; border: none; padding: 10px 24px; font-size: 16px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: all 0.2s; }
+        .btn-aba:hover { background: var(--bg-body); color: var(--text-main); }
+        .btn-aba.active { background: var(--primary-color); color: #fff; box-shadow: 0 4px 12px rgba(43, 108, 176, 0.3); }
+        
+        .grid-campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; align-items: end; }
         .campo-grupo { display: flex; flex-direction: column; }
-        .campo-grupo label {
-            font-size: 13px; font-weight: 600; color: var(--text-muted, #4a5568);
-            margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        .campo-grupo select, .campo-grupo input {
-            padding: 12px 15px; border: 1px solid var(--border-color, #cbd5e0);
-            border-radius: 8px; background-color: var(--bg-body, #f8f9fa);
-            font-size: 15px; color: var(--text-main, #2d3748); outline: none;
-        }
-        .campo-grupo select:focus, .campo-grupo input:focus {
-            border-color: var(--primary-color, #2b6cb0);
-            background-color: var(--bg-card, #fff);
-            box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.1);
-        }
+        .campo-grupo label { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .campo-grupo select, .campo-grupo input { padding: 14px 15px; border: 1px solid var(--border-color); border-radius: 10px; background-color: var(--bg-body); font-size: 15px; color: var(--text-main); outline: none; transition: border 0.2s; }
+        .campo-grupo select:focus, .campo-grupo input:focus { border-color: var(--primary-color); background-color: var(--bg-card); box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.1); }
+        
+        /* Botões Buscar e Refinar lado a lado na página de imóveis */
+        .botoes-busca-pagina { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; height: 51px; }
+        .btn-buscar-filtro, .btn-refinar-pagina { border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: all 0.2s; width: 100%; }
+        .btn-buscar-filtro { background: var(--accent-color); color: #fff; }
+        .btn-buscar-filtro:hover { background: #ea580c; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3); }
+        .btn-refinar-pagina { background: var(--bg-body); color: var(--text-main); border: 1px solid var(--border-color); }
+        .btn-refinar-pagina:hover { background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: translateY(-2px); }
 
-        .resultado-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 30px; padding: 15px 20px; background: var(--bg-card, #fff);
-            border-radius: 12px; border: 1px solid var(--border-color, #e2e8f0);
-            color: var(--text-muted, #4a5568); font-size: 15px;
-        }
-        #contador-resultados { font-weight: 600; color: var(--text-main, #1a365d); }
+        .resultado-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 15px 20px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); color: var(--text-muted); font-size: 15px; box-shadow: var(--shadow-sm); }
+        #contador-resultados { font-weight: 700; color: var(--text-main); }
+
+        /* Grid de imóveis */
+        #todos-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; justify-content: start; }
+
+        /* ========================================
+           ESTILOS DO PAINEL LATERAL (REFINAR PESQUISA)
+           ======================================== */
+        .overlay-filtros { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+        .overlay-filtros.ativo { opacity: 1; visibility: visible; }
+        .painel-filtros { position: fixed; top: 0; right: -420px; width: 100%; max-width: 420px; height: 100vh; background: var(--bg-card); z-index: 1001; box-shadow: -10px 0 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .painel-filtros.aberto { right: 0; }
+        .painel-header { display: flex; justify-content: space-between; align-items: center; padding: 25px; border-bottom: 1px solid var(--border-color); background: var(--bg-body); }
+        .painel-header h2 { font-size: 20px; color: var(--text-main); font-weight: 800; margin: 0; }
+        .btn-fechar-filtros { background: transparent; border: none; font-size: 24px; color: var(--text-muted); cursor: pointer; transition: color 0.2s; }
+        .btn-fechar-filtros:hover { color: #ef4444; }
+        .painel-corpo { padding: 25px; overflow-y: auto; flex: 1; }
+        .grupo-filtro { margin-bottom: 25px; }
+        .grupo-filtro label { display: block; font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 10px; }
+        .input-busca-painel { width: 100%; padding: 14px 16px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-body); color: var(--text-main); outline: none; font-size: 15px; transition: border 0.2s; }
+        .input-busca-painel:focus { border-color: var(--primary-color); }
+        .botoes-operacao { display: flex; gap: 10px; }
+        .btn-op { flex: 1; padding: 14px; border: 1px solid var(--border-color); background: transparent; color: var(--text-muted); border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .btn-op.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+        .input-row-painel { display: flex; gap: 15px; }
+        .input-row-painel > div { flex: 1; }
+        .input-row-painel input { width: 100%; padding: 14px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-body); color: var(--text-main); outline: none; font-size: 15px; }
+        .painel-footer { padding: 25px; border-top: 1px solid var(--border-color); display: flex; gap: 15px; background: var(--bg-card); box-shadow: 0 -10px 20px rgba(0,0,0,0.05); }
+        .btn-limpar-painel { flex: 1; padding: 16px; background: transparent; border: 2px solid var(--border-color); border-radius: 10px; color: var(--text-muted); font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .btn-limpar-painel:hover { border-color: #ef4444; color: #ef4444; }
+        .btn-aplicar-painel { flex: 2; padding: 16px; background: var(--primary-color); color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 16px; transition: all 0.2s; }
+        .btn-aplicar-painel:hover { background: #1e3a8a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(43, 108, 176, 0.3); }
+        .btn-group-qtd { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn-qtd { flex: 1; min-width: 50px; padding: 12px 0; border: 1px solid var(--border-color); background: transparent; color: var(--text-muted); border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.2s; }
+        .btn-qtd:hover { border-color: var(--primary-color); color: var(--primary-color); }
+        .btn-qtd.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
 
         @media (max-width: 900px) {
             .filtros-painel { margin: -20px 15px 30px; padding: 20px; }
             .hero-interno { padding: 120px 15px 60px; }
             .hero-interno h2 { font-size: 32px; }
+            .botoes-busca-pagina { grid-template-columns: 1fr 1fr; margin-top: 10px; }
         }
     </style>
 </head>
@@ -94,7 +93,8 @@
             </button>
             <nav class="nav" id="nav">
                 <a href="index.html">Início</a>
-                <a href="imoveis.html" style="color: var(--accent-color); font-weight: bold;">Todos os Imóveis</a>
+                <!-- MENU ALTERADO AQUI -->
+                <a href="imoveis.html" style="color: var(--accent-color); font-weight: bold;">Imóveis</a>
                 <a href="index.html#sobre">Sobre</a>
                 <button class="btn-tema" id="btn-tema" aria-label="Alternar Tema">
                     <i class="fa-solid fa-moon" id="icone-tema"></i>
@@ -122,13 +122,12 @@
             <div class="grid-campos">
                 <div class="campo-grupo">
                     <label>Tipo</label>
-                    <select id="filtro-tipo"><option value="">Todos os Tipos</option></select>
+                    <select id="filtro-tipo"><option value="">Todos</option></select>
                 </div>
                 <div class="campo-grupo">
                     <label>Bairro</label>
-                    <select id="filtro-bairro"><option value="">Todos os Bairros</option></select>
+                    <select id="filtro-bairro"><option value="">Todos</option></select>
                 </div>
-                <!-- BUSCA POR CÓDIGO -->
                 <div class="campo-grupo">
                     <label>Código</label>
                     <input type="text" id="filtro-codigo" placeholder="Ex: IMV-123">
@@ -141,14 +140,24 @@
                         <option value="maior-preco">Maior Preço</option>
                     </select>
                 </div>
+                <!-- BOTOES LADO A LADO -->
+                <div class="botoes-busca-pagina">
+                    <button id="btn-buscar-pagina" class="btn-buscar-filtro">
+                        <i class="fa-solid fa-magnifying-glass"></i> Buscar
+                    </button>
+                    <button id="btn-abrir-filtros" class="btn-refinar-pagina">
+                        <i class="fa-solid fa-sliders"></i> Refinar
+                    </button>
+                </div>
             </div>
         </div>
 
         <div class="resultado-bar">
             <span id="contador-resultados">Carregando...</span>
+            <button type="button" class="btn-limpar" id="btn-limpar-rapido" style="display: none;"><i class="fa-solid fa-xmark"></i> Limpar filtros</button>
         </div>
 
-        <div class="cards-grid" id="todos-cards"></div>
+        <div id="todos-cards"></div>
 
         <p id="sem-resultados" style="display:none;text-align:center;padding:40px;color:var(--text-muted);font-size:16px;">
             😕 Nenhum imóvel encontrado com esses filtros.
@@ -164,7 +173,7 @@
             <div>
                 <h4>Navegação</h4>
                 <a href="index.html">Início</a>
-                <a href="imoveis.html">Todos os Imóveis</a>
+                <a href="imoveis.html">Imóveis</a>
                 <a href="index.html#sobre">Sobre</a>
                 <a href="index.html#contato">Contato</a>
             </div>
@@ -176,11 +185,92 @@
         </div>
     </footer>
 
-    <a href="https://wa.me/5511999999999" class="whatsapp-float" target="_blank" rel="noopener">
+    <a href="https://wa.me/5521987654321" class="whatsapp-float" target="_blank" rel="noopener">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
-    <script>
+    <!-- PAINEL LATERAL DE FILTROS -->
+    <div id="overlay-filtros" class="overlay-filtros"></div>
+    <aside id="painel-filtros" class="painel-filtros">
+        <div class="painel-header">
+            <h2>Refinar Pesquisa</h2>
+            <button id="btn-fechar-filtros" class="btn-fechar-filtros"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div class="painel-corpo">
+            <div class="grupo-filtro">
+                <label>Busca Livre</label>
+                <input type="text" id="painel-busca-livre" class="input-busca-painel" placeholder="Título, bairro ou código...">
+            </div>
+            <div class="grupo-filtro">
+                <label>Operação</label>
+                <div class="botoes-operacao">
+                    <button type="button" class="btn-op active" data-type="venda">Comprar</button>
+                    <button type="button" class="btn-op" data-type="aluguel">Alugar</button>
+                </div>
+            </div>
+            <div class="grupo-filtro">
+                <label>Valor do Imóvel (R$)</label>
+                <div class="input-row-painel">
+                    <div><input type="number" id="painel-preco-min" placeholder="Mínimo"></div>
+                    <div><input type="number" id="painel-preco-max" placeholder="Máximo"></div>
+                </div>
+            </div>
+            <div class="grupo-filtro">
+                <label>Tipo de Imóvel</label>
+                <select id="painel-tipo" class="input-busca-painel"><option value="">Todos os Tipos</option></select>
+            </div>
+            <div class="grupo-filtro">
+                <label>Bairro</label>
+                <select id="painel-bairro" class="input-busca-painel"><option value="">Todos os Bairros</option></select>
+            </div>
+            <div class="grupo-filtro">
+                <label>Quartos</label>
+                <div class="btn-group-qtd" id="filtro-quartos">
+                    <button type="button" class="btn-qtd active" data-val="0">Todos</button>
+                    <button type="button" class="btn-qtd" data-val="1">1+</button>
+                    <button type="button" class="btn-qtd" data-val="2">2+</button>
+                    <button type="button" class="btn-qtd" data-val="3">3+</button>
+                    <button type="button" class="btn-qtd" data-val="4">4+</button>
+                </div>
+            </div>
+            <div class="grupo-filtro">
+                <label>Suítes</label>
+                <div class="btn-group-qtd" id="filtro-suites">
+                    <button type="button" class="btn-qtd active" data-val="0">Todas</button>
+                    <button type="button" class="btn-qtd" data-val="1">1+</button>
+                    <button type="button" class="btn-qtd" data-val="2">2+</button>
+                    <button type="button" class="btn-qtd" data-val="3">3+</button>
+                </div>
+            </div>
+            <div class="grupo-filtro">
+                <label>Banheiros</label>
+                <div class="btn-group-qtd" id="filtro-banheiros">
+                    <button type="button" class="btn-qtd active" data-val="0">Todos</button>
+                    <button type="button" class="btn-qtd" data-val="1">1+</button>
+                    <button type="button" class="btn-qtd" data-val="2">2+</button>
+                    <button type="button" class="btn-qtd" data-val="3">3+</button>
+                </div>
+            </div>
+            <div class="grupo-filtro">
+                <label>Vagas na Garagem</label>
+                <div class="btn-group-qtd" id="filtro-vagas">
+                    <button type="button" class="btn-qtd active" data-val="0">Todas</button>
+                    <button type="button" class="btn-qtd" data-val="1">1+</button>
+                    <button type="button" class="btn-qtd" data-val="2">2+</button>
+                    <button type="button" class="btn-qtd" data-val="3">3+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="painel-footer">
+            <button type="button" id="btn-limpar-painel" class="btn-limpar-painel">Limpar</button>
+            <button type="button" id="btn-aplicar-painel" class="btn-aplicar-painel">Filtrar</button>
+        </div>
+    </aside>
+
+    <!-- SCRIPT DA PÁGINA DE IMÓVEIS -->
+         <script>
         const SUPABASE_URL = 'https://hkqnpvixhrdorugcavtl.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrcW5wdml4aHJkb3J1Z2NhdnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3ODQ2OTAsImV4cCI6MjEwODM2MDY5MH0.XZOr0ykH00awbxSpsV7zgAS6n81xIqiGkxQOZqOseFI';
         const { createClient } = supabase;
@@ -188,11 +278,59 @@
 
         let todosImoveis = [];
         let tipoNegocio = 'venda';
+        
+        // Variáveis globais para armazenar os filtros
+        let reqQuartos = 0, reqSuites = 0, reqBanheiros = 0, reqVagas = 0;
 
         const grid = document.getElementById('todos-cards');
         const contador = document.getElementById('contador-resultados');
         const semResultados = document.getElementById('sem-resultados');
+        const btnLimparRapido = document.getElementById('btn-limpar-rapido');
 
+        // Painel Refinar
+        const painelFiltros = document.getElementById('painel-filtros');
+        const overlayFiltros = document.getElementById('overlay-filtros');
+        const btnAbrirFiltros = document.getElementById('btn-abrir-filtros');
+        const btnFecharFiltros = document.getElementById('btn-fechar-filtros');
+        const btnAplicarPainel = document.getElementById('btn-aplicar-painel');
+        const btnLimparPainel = document.getElementById('btn-limpar-painel');
+
+        // Controle do Painel
+        function abrirPainel() {
+            painelFiltros.classList.add('aberto');
+            overlayFiltros.classList.add('ativo');
+        }
+        function fecharPainel() {
+            painelFiltros.classList.remove('aberto');
+            overlayFiltros.classList.remove('ativo');
+        }
+        if (btnAbrirFiltros) btnAbrirFiltros.addEventListener('click', abrirPainel);
+        if (btnFecharFiltros) btnFecharFiltros.addEventListener('click', fecharPainel);
+        if (overlayFiltros) overlayFiltros.addEventListener('click', fecharPainel);
+
+        // Configurar botões de quantidade
+        function configurarBotoesQtd(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.querySelectorAll('.btn-qtd').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    container.querySelectorAll('.btn-qtd').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const valor = parseInt(btn.dataset.val);
+                    
+                    if (containerId === 'filtro-quartos') reqQuartos = valor;
+                    if (containerId === 'filtro-suites') reqSuites = valor;
+                    if (containerId === 'filtro-banheiros') reqBanheiros = valor;
+                    if (containerId === 'filtro-vagas') reqVagas = valor;
+                });
+            });
+        }
+        configurarBotoesQtd('filtro-quartos');
+        configurarBotoesQtd('filtro-suites');
+        configurarBotoesQtd('filtro-banheiros');
+        configurarBotoesQtd('filtro-vagas');
+
+        // Carregar
         async function carregarTodos() {
             grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Carregando imóveis...</p>';
             const { data, error } = await _supabase.from('imoveis').select('*').order('created_at', { ascending: false });
@@ -208,29 +346,35 @@
         function preencherFiltrosDinamicos() {
             const selectTipo = document.getElementById('filtro-tipo');
             const selectBairro = document.getElementById('filtro-bairro');
-            const tipos = new Set(); const bairros = new Set();
+            const painelTipo = document.getElementById('painel-tipo');
+            const painelBairro = document.getElementById('painel-bairro');
 
+            const tipos = new Set(); const bairros = new Set();
             todosImoveis.forEach(i => {
                 if (i.tipo) tipos.add(i.tipo.trim());
                 if (i.bairro) bairros.add(i.bairro.trim());
             });
 
-            selectTipo.innerHTML = '<option value="">Todos os Tipos</option>';
-            Array.from(tipos).sort().forEach(t => {
-                selectTipo.innerHTML += `<option value="${t.toLowerCase()}">${t.charAt(0).toUpperCase() + t.slice(1)}</option>`;
-            });
+            const htmlTipos = '<option value="">Todos os Tipos</option>' + Array.from(tipos).sort().map(t => `<option value="${t.toLowerCase()}">${t.charAt(0).toUpperCase() + t.slice(1)}</option>`).join('');
+            const htmlBairros = '<option value="">Todos os Bairros</option>' + Array.from(bairros).sort().map(b => `<option value="${b.toLowerCase()}">${b}</option>`).join('');
 
-            selectBairro.innerHTML = '<option value="">Todos os Bairros</option>';
-            Array.from(bairros).sort().forEach(b => {
-                selectBairro.innerHTML += `<option value="${b.toLowerCase()}">${b}</option>`;
-            });
+            selectTipo.innerHTML = htmlTipos; painelTipo.innerHTML = htmlTipos;
+            selectBairro.innerHTML = htmlBairros; painelBairro.innerHTML = htmlBairros;
         }
 
         function aplicarFiltros() {
-            const tipoFiltro = document.getElementById('filtro-tipo').value;
-            const bairroFiltro = document.getElementById('filtro-bairro').value;
+            // Captura os valores do painel (independente se está aberto ou não)
+            const buscaLivre = document.getElementById('painel-busca-livre').value.toLowerCase();
             const codigoFiltro = document.getElementById('filtro-codigo').value.toLowerCase();
             const ordem = document.getElementById('filtro-ordem').value;
+
+            // Os valores abaixo vêm do select principal ou do painel. 
+            // Como o painel reflete o principal, vamos pegar o que estiver preenchido.
+            const tipoFiltro = document.getElementById('painel-tipo').value || document.getElementById('filtro-tipo').value;
+            const bairroFiltro = document.getElementById('painel-bairro').value || document.getElementById('filtro-bairro').value;
+
+            const precoMin = parseFloat(document.getElementById('painel-preco-min').value) || 0;
+            const precoMax = parseFloat(document.getElementById('painel-preco-max').value) || Infinity;
 
             let filtrados = todosImoveis.filter(imovel => {
                 const bateNegocio = imovel.negocio === tipoNegocio;
@@ -240,7 +384,25 @@
                 const codigoImovel = imovel.codigo ? imovel.codigo.toLowerCase() : imovel.id.toString();
                 const bateCodigo = !codigoFiltro || codigoImovel.includes(codigoFiltro);
                 
-                return bateNegocio && bateTipo && bateBairro && bateCodigo;
+                const bateBusca = !buscaLivre || 
+                    imovel.titulo.toLowerCase().includes(buscaLivre) || 
+                    imovel.bairro.toLowerCase().includes(buscaLivre) || 
+                    codigoImovel.includes(buscaLivre);
+
+                const batePreco = imovel.preco >= precoMin && imovel.preco <= precoMax;
+                
+                // Filtros de quantidade (AQUI É ONDE ESTAVA O ERRO - agora usa as variáveis globais)
+                const cQuartos = parseInt(imovel.quartos) || 0;
+                const cSuites = parseInt(imovel.suites) || 0;
+                const cBanheiros = parseInt(imovel.banheiros) || 0;
+                const cVagas = parseInt(imovel.vagas) || 0;
+
+                const bateQ = cQuartos >= reqQuartos;
+                const bateS = cSuites >= reqSuites;
+                const bateB = cBanheiros >= reqBanheiros;
+                const bateV = cVagas >= reqVagas;
+                
+                return bateNegocio && bateTipo && bateBairro && bateCodigo && bateBusca && batePreco && bateQ && bateS && bateB && bateV;
             });
 
             if (ordem === 'menor-preco') filtrados.sort((a, b) => a.preco - b.preco);
@@ -248,6 +410,7 @@
             else filtrados.sort((a, b) => b.id - a.id); 
 
             renderizarCards(filtrados);
+            fecharPainel();
         }
 
         function renderizarCards(lista) {
@@ -255,12 +418,19 @@
             semResultados.style.display = lista.length === 0 ? 'block' : 'none';
             contador.textContent = lista.length === 1 ? '1 imóvel encontrado' : `${lista.length} imóveis encontrados`;
 
+            // Mostra o botão de limpar se houver qualquer filtro ativo
+            if (btnLimparRapido) {
+                const isFiltro = document.getElementById('filtro-tipo').value || document.getElementById('filtro-bairro').value || document.getElementById('filtro-codigo').value || reqQuartos > 0 || reqSuites > 0 || reqBanheiros > 0 || reqVagas > 0;
+                btnLimparRapido.style.display = isFiltro ? 'inline-block' : 'none';
+            }
+
             if (lista.length === 0) return;
 
             lista.forEach(imovel => {
                 let capa = imovel.fotos && imovel.fotos.length > 0 ? imovel.fotos[0] : 'https://via.placeholder.com/500';
                 let tagClass = imovel.negocio === 'aluguel' ? 'tag-aluguel' : '';
                 let precoTexto = imovel.negocio === 'aluguel' ? `R$ ${imovel.preco.toLocaleString('pt-BR')} <small>/mês</small>` : `R$ ${imovel.preco.toLocaleString('pt-BR')}`;
+                const suitesTexto = imovel.suites > 0 ? `<span><i class="fa-solid fa-door-open"></i> ${imovel.suites} Suítes</span>` : '';
 
                 grid.innerHTML += `
                     <div class="card">
@@ -272,7 +442,8 @@
                             <p class="card-location"><i class="fa-solid fa-location-dot"></i> ${imovel.bairro}</p>
                             <div class="card-details">
                                 <span><i class="fa-solid fa-bed"></i> ${imovel.quartos} Qts</span>
-                                <span><i class="fa-solid fa-bath"></i> ${imovel.banheiros} Banheiros</span>
+                                ${suitesTexto}
+                                <span><i class="fa-solid fa-bath"></i> ${imovel.banheiros} Banh</span>
                                 <span><i class="fa-solid fa-car"></i> ${imovel.vagas} Vagas</span>
                             </div>
                             <a href="imovel.html?id=${imovel.id}" class="btn-card">Ver Detalhes</a>
@@ -282,27 +453,57 @@
             });
         }
 
-        document.querySelectorAll('.btn-aba').forEach(btn => {
+        // Eventos
+        document.querySelectorAll('.btn-aba, .btn-op').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.btn-aba').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.btn-aba, .btn-op').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 tipoNegocio = btn.dataset.type;
                 aplicarFiltros();
             });
         });
 
+        document.getElementById('btn-buscar-pagina').addEventListener('click', aplicarFiltros);
+        document.getElementById('filtro-codigo').addEventListener('keyup', (e) => { if(e.key === 'Enter') aplicarFiltros(); });
         document.getElementById('filtro-tipo').addEventListener('change', aplicarFiltros);
         document.getElementById('filtro-bairro').addEventListener('change', aplicarFiltros);
-        document.getElementById('filtro-codigo').addEventListener('input', aplicarFiltros);
         document.getElementById('filtro-ordem').addEventListener('change', aplicarFiltros);
+        if(btnAplicarPainel) btnAplicarPainel.addEventListener('click', aplicarFiltros);
 
+        // Limpar Filtros
+        function resetarTudo() {
+            document.getElementById('filtro-tipo').value = '';
+            document.getElementById('filtro-bairro').value = '';
+            document.getElementById('filtro-codigo').value = '';
+            document.getElementById('painel-busca-livre').value = '';
+            document.getElementById('painel-preco-min').value = '';
+            document.getElementById('painel-preco-max').value = '';
+            document.getElementById('painel-tipo').value = '';
+            document.getElementById('painel-bairro').value = '';
+            
+            // Zera as variáveis globais de quartos/suites
+            reqQuartos = 0; reqSuites = 0; reqBanheiros = 0; reqVagas = 0;
+            
+            ['filtro-quartos', 'filtro-suites', 'filtro-banheiros', 'filtro-vagas'].forEach(id => {
+                const c = document.getElementById(id);
+                if(c) c.querySelectorAll('.btn-qtd').forEach((b, i) => { 
+                    if(i===0) b.classList.add('active'); 
+                    else b.classList.remove('active'); 
+                });
+            });
+            aplicarFiltros();
+        }
+
+        if(btnLimparPainel) btnLimparPainel.addEventListener('click', () => { resetarTudo(); fecharPainel(); });
+        if(btnLimparRapido) btnLimparRapido.addEventListener('click', resetarTudo);
+
+        // Menu e Tema
         const menuToggle = document.getElementById('menu-toggle');
         const nav = document.getElementById('nav');
         if (menuToggle && nav) {
             menuToggle.addEventListener('click', () => nav.classList.toggle('aberto'));
+            document.querySelectorAll('.nav a').forEach(link => link.addEventListener('click', () => nav.classList.remove('aberto')));
         }
-
-        // Tema
         const btnTema = document.getElementById('btn-tema');
         const iconeTema = document.getElementById('icone-tema');
         if (localStorage.getItem('tema') === 'dark') {
@@ -313,11 +514,9 @@
             btnTema.addEventListener('click', () => {
                 document.body.classList.toggle('dark-mode');
                 if (document.body.classList.contains('dark-mode')) {
-                    localStorage.setItem('tema', 'dark');
-                    iconeTema.classList.remove('fa-moon'); iconeTema.classList.add('fa-sun');
+                    localStorage.setItem('tema', 'dark'); iconeTema.classList.remove('fa-moon'); iconeTema.classList.add('fa-sun');
                 } else {
-                    localStorage.setItem('tema', 'light');
-                    iconeTema.classList.remove('fa-sun'); iconeTema.classList.add('fa-moon');
+                    localStorage.setItem('tema', 'light'); iconeTema.classList.remove('fa-sun'); iconeTema.classList.add('fa-moon');
                 }
             });
         }

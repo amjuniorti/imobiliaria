@@ -10,9 +10,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        .banner-interno { background: linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat; padding: 120px 0 80px; text-align: center; color: #fff; }
-        .imovel-page { margin-top: -40px; padding: 40px; border-radius: 16px; position: relative; z-index: 10; }
-        @media (max-width: 768px) { .banner-interno { padding: 100px 15px 60px; } .imovel-page { padding: 20px; } }
+        .banner-interno {
+            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat;
+            padding: 120px 0 80px;
+            text-align: center;
+            color: #fff;
+        }
+        .imovel-page {
+            margin-top: -40px;
+            padding: 40px;
+            border-radius: 16px;
+            position: relative;
+            z-index: 10;
+        }
+        @media (max-width: 768px) {
+            .banner-interno { padding: 100px 15px 60px; }
+            .imovel-page { padding: 20px; }
+        }
     </style>
 </head>
 <body>
@@ -49,11 +63,11 @@
         <div id="erro" class="erro" style="display:none; text-align: center; padding: 80px 20px;">
             <i class="fa-solid fa-triangle-exclamation" style="font-size: 50px; color: #e53e3e; margin-bottom: 20px;"></i>
             <h2 style="color: var(--text-main); margin-bottom: 10px;">Imóvel não encontrado</h2>
-            <a href="imoveis.html" class="btn-search" style="display:inline-block; margin-top:30px; text-decoration:none;">Ver outros imóveis</a>
+            <a href="imoveis.html" class="btn-search" style="display:inline-block; margin-top:30px; text-decoration:none; padding: 12px 24px;">Ver outros imóveis</a>
         </div>
 
         <div id="conteudo-imovel" class="imovel-page" style="display:none; background: var(--bg-card); box-shadow: var(--shadow); border: 1px solid var(--border-color);">
-            
+
             <nav class="breadcrumb" style="margin-bottom: 25px;">
                 <a href="index.html">Início</a> <i class="fa-solid fa-chevron-right" style="font-size: 10px; margin: 0 5px;"></i>
                 <a href="imoveis.html">Imóveis</a> <i class="fa-solid fa-chevron-right" style="font-size: 10px; margin: 0 5px;"></i>
@@ -74,21 +88,21 @@
                     <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 15px;">
                         Código do Imóvel: <strong id="imovel-codigo" style="color: var(--primary-color);">—</strong>
                     </p>
-                    
+
                     <p class="imovel-local"><i class="fa-solid fa-location-dot"></i> <span id="imovel-endereco">—</span></p>
-                    
+
                     <div class="imovel-preco-box">
                         <span class="imovel-preco" id="imovel-preco">—</span>
                         <span class="imovel-preco-nota" id="imovel-preco-nota"></span>
                     </div>
-                    
+
                     <div class="imovel-caracteristicas" id="imovel-caracteristicas"></div>
-                    
+
                     <section class="imovel-secao">
                         <h2><i class="fa-solid fa-align-left"></i> Descrição</h2>
                         <p id="imovel-descricao">—</p>
                     </section>
-                    
+
                     <section class="imovel-secao">
                         <h2><i class="fa-solid fa-list-check"></i> Comodidades</h2>
                         <ul class="comodidades-lista" id="imovel-comodidades"></ul>
@@ -99,8 +113,7 @@
                     <div class="contato-card">
                         <h3>Tenho interesse</h3>
                         <p>Fale com um de nossos corretores.</p>
-                        
-                        <!-- BOTÃO DO WHATSAPP LATERAL -->
+
                         <a id="btn-whatsapp" href="#" target="_blank" rel="noopener" class="btn-whatsapp-imovel">
                             <i class="fa-brands fa-whatsapp"></i> Falar no WhatsApp
                         </a>
@@ -121,12 +134,11 @@
             <div><h4>Navegação</h4><a href="index.html">Início</a><a href="imoveis.html">Todos os Imóveis</a></div>
         </div>
     </footer>
-    
-    <!-- BOTÃO DO WHATSAPP FLUTUANTE (TROQUE O NÚMERO ABAIXO) -->
-    <a href="https://wa.me/5521987654321" class="whatsapp-float" target="_blank" rel="noopener">
+
+    <a href="https://wa.me/5521987654321" class="whatsapp-float" target="_blank" rel="noopener" aria-label="WhatsApp">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
-    
+
     <script src="js/imovel.js"></script>
 </body>
 </html>
