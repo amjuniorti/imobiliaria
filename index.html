@@ -41,6 +41,25 @@
         .btn-qtd { flex: 1; min-width: 50px; padding: 12px 0; border: 1px solid var(--border-color); background: transparent; color: var(--text-muted); border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.2s; }
         .btn-qtd:hover { border-color: var(--primary-color); color: var(--primary-color); }
         .btn-qtd.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+
+        /* ========================================
+           FORÇA OS 4 CAMPOS DA BUSCA A FICAREM NA MESMA LINHA
+           ======================================== */
+        .search-fields { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); /* 4 colunas iguais */
+            gap: 15px; 
+            align-items: end; 
+            margin-bottom: 15px; 
+        }
+
+        /* Responsividade da barra de busca */
+        @media (max-width: 900px) {
+            .search-fields { grid-template-columns: repeat(2, 1fr); } /* 2 colunas no tablet */
+        }
+        @media (max-width: 600px) {
+            .search-fields { grid-template-columns: 1fr; } /* 1 coluna no celular */
+        }
     </style>
 </head>
 <body>
@@ -48,12 +67,16 @@
     <header class="header">
         <div class="container nav-container">
             <a href="index.html" class="logo">Sua Casa <span>Imóveis</span></a>
-            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
             <nav class="nav" id="nav">
                 <a href="index.html">Início</a>
                 <a href="imoveis.html">Imóveis</a>
                 <a href="#sobre">Sobre</a>
-                <button class="btn-tema" id="btn-tema" aria-label="Alternar Tema"><i class="fa-solid fa-moon" id="icone-tema"></i></button>
+                <button class="btn-tema" id="btn-tema" aria-label="Alternar Tema">
+                    <i class="fa-solid fa-moon" id="icone-tema"></i>
+                </button>
                 <a href="#contato" class="btn-contato">Fale Conosco</a>
             </nav>
         </div>
@@ -71,6 +94,13 @@
                         <button type="button" class="type-btn" data-type="aluguel">Alugar</button>
                     </div>
                     
+                    <!-- BUSCA GERAL -->
+                    <div class="field" style="margin-bottom: 15px;">
+                        <label for="busca-geral-topo"><i class="fa-solid fa-magnifying-glass"></i> O que você procura?</label>
+                        <input type="text" id="busca-geral-topo" placeholder="Ex: Casa com piscina no centro, ou código IMV-123...">
+                    </div>
+
+                    <!-- CAMPOS DA BUSCA (4 COLUNAS) -->
                     <div class="search-fields">
                         <div class="field">
                             <label for="tipo"><i class="fa-solid fa-house"></i> Tipo</label>
@@ -84,15 +114,24 @@
                             <label for="preco"><i class="fa-solid fa-dollar-sign"></i> Valor Máximo</label>
                             <input type="number" id="preco" placeholder="R$ Até quanto?">
                         </div>
-                        
-                        <div class="botoes-busca">
-                            <button type="button" class="btn-search" id="btn-buscar">
-                                <i class="fa-solid fa-magnifying-glass"></i> Buscar
-                            </button>
-                            <button type="button" class="btn-refinar" id="btn-abrir-filtros">
-                                <i class="fa-solid fa-sliders"></i> Refinar
-                            </button>
+                        <div class="field">
+                            <label for="ordenar-por"><i class="fa-solid fa-arrow-down-wide-short"></i> Ordenar Por</label>
+                            <select id="ordenar-por">
+                                <option value="recentes">Mais Recentes</option>
+                                <option value="menor-preco">Menor Preço</option>
+                                <option value="maior-preco">Maior Preço</option>
+                            </select>
                         </div>
+                    </div>
+                    
+                    <!-- BOTÕES LARGOS (FORA DO GRID) -->
+                    <div class="botoes-busca">
+                        <button type="button" class="btn-search" id="btn-buscar">
+                            <i class="fa-solid fa-magnifying-glass"></i> Buscar Imóveis
+                        </button>
+                        <button type="button" class="btn-refinar" id="btn-abrir-filtros">
+                            <i class="fa-solid fa-sliders"></i> Refinar Pesquisa
+                        </button>
                     </div>
                 </form>
             </div>

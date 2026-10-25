@@ -233,11 +233,11 @@ window.editarImovel = function(id) {
     document.getElementById('bairro').value = imovel.bairro;
     document.getElementById('preco').value = imovel.preco;
     
-    // CARREGANDO OS CAMPOS
     document.getElementById('quartos').value = imovel.quartos || 0;
     document.getElementById('suites').value = imovel.suites || 0;
     document.getElementById('banheiros').value = imovel.banheiros || 0;
     document.getElementById('vagas').value = imovel.vagas || 0;
+    document.getElementById('metragem').value = imovel.metragem || 0;
     
     document.getElementById('nota_preco').value = imovel.nota_preco || '';
     document.getElementById('descricao').value = imovel.descricao || '';
@@ -277,7 +277,6 @@ formImovel.addEventListener('submit', async (e) => {
         let codigoGerado = document.getElementById('codigo').value;
         if (!codigoGerado) codigoGerado = 'IMV-' + Date.now().toString().slice(-6);
 
-        // ENVIANDO OS DADOS INCLUINDO SUÍTES
         const dados = {
             titulo: document.getElementById('titulo').value,
             negocio: document.getElementById('negocio').value,
@@ -288,6 +287,7 @@ formImovel.addEventListener('submit', async (e) => {
             suites: parseInt(document.getElementById('suites').value, 10) || 0,
             banheiros: parseInt(document.getElementById('banheiros').value, 10),
             vagas: parseInt(document.getElementById('vagas').value, 10),
+            metragem: parseInt(document.getElementById('metragem').value, 10) || 0,
             nota_preco: document.getElementById('nota_preco').value,
             descricao: document.getElementById('descricao').value,
             comodidades: document.getElementById('comodidades').value,
@@ -338,7 +338,7 @@ function resetForm() {
     if(btnSalvar) btnSalvar.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar Imóvel';
 }
 
-// ====== MENSAGENS ======
+// ====== MENSAGENS (LAYOUT CORRIGIDO) ======
 async function carregarMensagens() {
     listaMensagens.innerHTML = '<p style="text-align:center;">Carregando...</p>';
     const { data } = await _supabase.from('mensagens').select('*').order('created_at', { ascending: false });
@@ -352,37 +352,40 @@ async function carregarMensagens() {
     data.forEach(msg => {
         const div = document.createElement('div');
         div.className = 'item-admin';
-        div.style.flexDirection = 'column';
-        div.style.alignItems = 'flex-start';
         div.style.borderLeft = msg.lida ? '4px solid #38a169' : '4px solid transparent';
 
+        // Layout corrigido para não sobrepor no celular
         let acoesHTML = msg.lida ? `
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; width: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; width: 100%; flex-wrap: wrap; gap: 10px;">
                 <span style="font-size:14px; color:#38a169; font-weight:bold; display:flex; align-items:center; gap:6px;">
                     <i class="fa-solid fa-circle-check" style="font-size: 18px;"></i> Mensagem Concluída
                 </span>
-                <button onclick="excluirMensagem(${msg.id})" class="btn-acao delete" style="background:#e53e3e; color:#fff; border:none; padding: 6px 12px; border-radius:4px; cursor:pointer;">
+                <button onclick="excluirMensagem(${msg.id})" class="btn-acao delete" style="background:#e53e3e; color:#fff; border:none;">
                     <i class="fa-solid fa-trash"></i> Apagar
                 </button>
             </div>
         ` : `
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <button onclick="marcarLida(${msg.id}, event)" class="btn-acao" style="background:#38a169; color:#fff; border:none; padding: 6px 12px; border-radius:4px; cursor:pointer;">
+            <div style="display: flex; gap: 10px; margin-top: 15px; width: 100%;">
+                <button onclick="marcarLida(${msg.id}, event)" class="btn-acao" style="flex: 1; background:#38a169; color:#fff; border:none;">
                     <i class="fa-solid fa-check"></i> Concluir
                 </button>
-                <button onclick="excluirMensagem(${msg.id})" class="btn-acao delete" style="background:#e53e3e; color:#fff; border:none; padding: 6px 12px; border-radius:4px; cursor:pointer;">
+                <button onclick="excluirMensagem(${msg.id})" class="btn-acao delete" style="flex: 1; background:#e53e3e; color:#fff; border:none;">
                     <i class="fa-solid fa-trash"></i> Apagar
                 </button>
             </div>
         `;
 
         div.innerHTML = `
-            <div style="width: 100%; display: flex; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 5px;">
-                <strong style="color: var(--primary-color);">${msg.nome} (${msg.email})</strong>
+            <div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 10px;">
+                <strong style="color: var(--primary-color); font-size: 15px; margin-bottom: 5px;">
+                    ${msg.nome} <br>
+                    <span style="font-size: 13px; color: var(--text-muted); font-weight: normal;">(${msg.email})</span>
+                </strong>
                 <span style="font-size: 12px; color: var(--text-muted);">${new Date(msg.created_at).toLocaleString('pt-BR')}</span>
             </div>
-            <p style="margin-bottom: 10px; font-size: 14px; color: var(--text-main);">${msg.mensagem}</p>
-            <p style="font-size: 12px; color: var(--text-muted);"><i class="fa-solid fa-phone"></i> ${msg.telefone || 'Não informado'}</p>
+            <p style="margin-bottom: 10px; font-size: 14px; color: var(--text-main); background: rgba(0,0,0,0.05); padding: 10px; border-radius: 8px; width: 100%; box-sizing: border-box; word-wrap: break-word;">${msg.mensagem}</p>
+            <p style="font-size: 13px; color: var(--text-muted);"><i class="fa-solid fa-phone"></i> ${msg.telefone || 'Não informado'}</p>
+            
             ${acoesHTML}
         `;
         listaMensagens.appendChild(div);

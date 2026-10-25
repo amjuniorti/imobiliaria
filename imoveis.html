@@ -16,24 +16,64 @@
         .hero-interno h2 { font-size: 42px; font-weight: 800; margin-bottom: 10px; letter-spacing: -1px; }
         .hero-interno p { font-size: 18px; color: #cbd5e0; }
 
-        /* Painel de Filtros Principal (que fica na tela) */
-        .filtros-painel { background: var(--bg-card); border-radius: 20px; box-shadow: var(--shadow-lg); padding: 30px; max-width: 1100px; margin: -40px auto 40px; position: relative; z-index: 10; border: 1px solid var(--border-color); }
+        /* Painel de Filtros Principal */
+        .filtros-painel { 
+            background: var(--bg-card); 
+            border-radius: 20px; 
+            box-shadow: var(--shadow-lg); 
+            padding: 30px; 
+            max-width: 1100px; 
+            margin: -40px auto 40px; 
+            position: relative; 
+            z-index: 10; 
+            border: 1px solid var(--border-color); 
+        }
+        
         .abas-negocio { display: flex; gap: 15px; margin-bottom: 25px; border-bottom: 2px solid var(--border-color); padding-bottom: 20px; }
         .btn-aba { background: transparent; border: none; padding: 10px 24px; font-size: 16px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: all 0.2s; }
         .btn-aba:hover { background: var(--bg-body); color: var(--text-main); }
         .btn-aba.active { background: var(--primary-color); color: #fff; box-shadow: 0 4px 12px rgba(43, 108, 176, 0.3); }
         
-        .grid-campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; align-items: end; }
+        /* Grid dos campos idêntico ao index */
+        .search-fields { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 15px; 
+            align-items: end; 
+            margin-bottom: 15px; 
+        }
+        
         .campo-grupo { display: flex; flex-direction: column; }
         .campo-grupo label { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
         .campo-grupo select, .campo-grupo input { padding: 14px 15px; border: 1px solid var(--border-color); border-radius: 10px; background-color: var(--bg-body); font-size: 15px; color: var(--text-main); outline: none; transition: border 0.2s; }
         .campo-grupo select:focus, .campo-grupo input:focus { border-color: var(--primary-color); background-color: var(--bg-card); box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.1); }
         
-        /* Botões Buscar e Refinar lado a lado na página de imóveis */
-        .botoes-busca-pagina { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; height: 51px; }
-        .btn-buscar-filtro, .btn-refinar-pagina { border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: all 0.2s; width: 100%; }
-        .btn-buscar-filtro { background: var(--accent-color); color: #fff; }
-        .btn-buscar-filtro:hover { background: #ea580c; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3); }
+        /* BOTÕES LARGOS (FORA DO GRID) */
+        .botoes-busca-pagina { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            width: 100%; 
+            margin-top: 15px;
+        }
+        
+        .btn-buscar-filtro, .btn-refinar-pagina { 
+            border: none; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 8px; 
+            transition: all 0.2s; 
+            padding: 16px;
+        }
+        
+        .btn-buscar-filtro { background: var(--accent-color); color: #fff; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3); }
+        .btn-buscar-filtro:hover { background: #ea580c; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4); }
+        
         .btn-refinar-pagina { background: var(--bg-body); color: var(--text-main); border: 1px solid var(--border-color); }
         .btn-refinar-pagina:hover { background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: translateY(-2px); }
 
@@ -43,9 +83,7 @@
         /* Grid de imóveis */
         #todos-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; justify-content: start; }
 
-        /* ========================================
-           ESTILOS DO PAINEL LATERAL (REFINAR PESQUISA)
-           ======================================== */
+        /* ESTILOS DO PAINEL LATERAL */
         .overlay-filtros { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
         .overlay-filtros.ativo { opacity: 1; visibility: visible; }
         .painel-filtros { position: fixed; top: 0; right: -420px; width: 100%; max-width: 420px; height: 100vh; background: var(--bg-card); z-index: 1001; box-shadow: -10px 0 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -75,11 +113,16 @@
         .btn-qtd:hover { border-color: var(--primary-color); color: var(--primary-color); }
         .btn-qtd.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
 
+        /* Responsividade */
         @media (max-width: 900px) {
             .filtros-painel { margin: -20px 15px 30px; padding: 20px; }
             .hero-interno { padding: 120px 15px 60px; }
             .hero-interno h2 { font-size: 32px; }
-            .botoes-busca-pagina { grid-template-columns: 1fr 1fr; margin-top: 10px; }
+            .search-fields { grid-template-columns: repeat(2, 1fr); } /* 2 colunas */
+            .botoes-busca-pagina { grid-template-columns: 1fr; } /* Botões empilhados */
+        }
+        @media (max-width: 600px) {
+            .search-fields { grid-template-columns: 1fr; } /* 1 coluna */
         }
     </style>
 </head>
@@ -93,7 +136,6 @@
             </button>
             <nav class="nav" id="nav">
                 <a href="index.html">Início</a>
-                <!-- MENU ALTERADO AQUI -->
                 <a href="imoveis.html" style="color: var(--accent-color); font-weight: bold;">Imóveis</a>
                 <a href="index.html#sobre">Sobre</a>
                 <button class="btn-tema" id="btn-tema" aria-label="Alternar Tema">
@@ -119,7 +161,13 @@
                 <button type="button" class="btn-aba" data-type="aluguel">Alugar</button>
             </div>
 
-            <div class="grid-campos">
+            <div class="search-fields">
+                <!-- BUSCA GERAL -->
+                <div class="campo-grupo" style="grid-column: 1 / -1; margin-bottom: 5px;">
+                    <label>Busca Geral</label>
+                    <input type="text" id="busca-geral-pagina" placeholder="O que você procura? (Título, descrição, bairro, código...)">
+                </div>
+
                 <div class="campo-grupo">
                     <label>Tipo</label>
                     <select id="filtro-tipo"><option value="">Todos</option></select>
@@ -140,15 +188,16 @@
                         <option value="maior-preco">Maior Preço</option>
                     </select>
                 </div>
-                <!-- BOTOES LADO A LADO -->
-                <div class="botoes-busca-pagina">
-                    <button id="btn-buscar-pagina" class="btn-buscar-filtro">
-                        <i class="fa-solid fa-magnifying-glass"></i> Buscar
-                    </button>
-                    <button id="btn-abrir-filtros" class="btn-refinar-pagina">
-                        <i class="fa-solid fa-sliders"></i> Refinar
-                    </button>
-                </div>
+            </div>
+
+            <!-- BOTÕES LARGOS -->
+            <div class="botoes-busca-pagina">
+                <button id="btn-buscar-pagina" class="btn-buscar-filtro">
+                    <i class="fa-solid fa-magnifying-glass"></i> Buscar Imóveis
+                </button>
+                <button id="btn-abrir-filtros" class="btn-refinar-pagina">
+                    <i class="fa-solid fa-sliders"></i> Refinar Pesquisa
+                </button>
             </div>
         </div>
 
@@ -189,7 +238,6 @@
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
-    <!-- PAINEL LATERAL DE FILTROS -->
     <div id="overlay-filtros" class="overlay-filtros"></div>
     <aside id="painel-filtros" class="painel-filtros">
         <div class="painel-header">
@@ -269,8 +317,7 @@
         </div>
     </aside>
 
-    <!-- SCRIPT DA PÁGINA DE IMÓVEIS -->
-         <script>
+    <script>
         const SUPABASE_URL = 'https://hkqnpvixhrdorugcavtl.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrcW5wdml4aHJkb3J1Z2NhdnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3ODQ2OTAsImV4cCI6MjEwODM2MDY5MH0.XZOr0ykH00awbxSpsV7zgAS6n81xIqiGkxQOZqOseFI';
         const { createClient } = supabase;
@@ -278,8 +325,6 @@
 
         let todosImoveis = [];
         let tipoNegocio = 'venda';
-        
-        // Variáveis globais para armazenar os filtros
         let reqQuartos = 0, reqSuites = 0, reqBanheiros = 0, reqVagas = 0;
 
         const grid = document.getElementById('todos-cards');
@@ -287,7 +332,6 @@
         const semResultados = document.getElementById('sem-resultados');
         const btnLimparRapido = document.getElementById('btn-limpar-rapido');
 
-        // Painel Refinar
         const painelFiltros = document.getElementById('painel-filtros');
         const overlayFiltros = document.getElementById('overlay-filtros');
         const btnAbrirFiltros = document.getElementById('btn-abrir-filtros');
@@ -295,20 +339,12 @@
         const btnAplicarPainel = document.getElementById('btn-aplicar-painel');
         const btnLimparPainel = document.getElementById('btn-limpar-painel');
 
-        // Controle do Painel
-        function abrirPainel() {
-            painelFiltros.classList.add('aberto');
-            overlayFiltros.classList.add('ativo');
-        }
-        function fecharPainel() {
-            painelFiltros.classList.remove('aberto');
-            overlayFiltros.classList.remove('ativo');
-        }
+        function abrirPainel() { painelFiltros.classList.add('aberto'); overlayFiltros.classList.add('ativo'); }
+        function fecharPainel() { painelFiltros.classList.remove('aberto'); overlayFiltros.classList.remove('ativo'); }
         if (btnAbrirFiltros) btnAbrirFiltros.addEventListener('click', abrirPainel);
         if (btnFecharFiltros) btnFecharFiltros.addEventListener('click', fecharPainel);
         if (overlayFiltros) overlayFiltros.addEventListener('click', fecharPainel);
 
-        // Configurar botões de quantidade
         function configurarBotoesQtd(containerId) {
             const container = document.getElementById(containerId);
             if (!container) return;
@@ -317,7 +353,6 @@
                     container.querySelectorAll('.btn-qtd').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     const valor = parseInt(btn.dataset.val);
-                    
                     if (containerId === 'filtro-quartos') reqQuartos = valor;
                     if (containerId === 'filtro-suites') reqSuites = valor;
                     if (containerId === 'filtro-banheiros') reqBanheiros = valor;
@@ -325,19 +360,12 @@
                 });
             });
         }
-        configurarBotoesQtd('filtro-quartos');
-        configurarBotoesQtd('filtro-suites');
-        configurarBotoesQtd('filtro-banheiros');
-        configurarBotoesQtd('filtro-vagas');
+        configurarBotoesQtd('filtro-quartos'); configurarBotoesQtd('filtro-suites'); configurarBotoesQtd('filtro-banheiros'); configurarBotoesQtd('filtro-vagas');
 
-        // Carregar
         async function carregarTodos() {
             grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Carregando imóveis...</p>';
             const { data, error } = await _supabase.from('imoveis').select('*').order('created_at', { ascending: false });
-            if (error || !data) {
-                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: red;">Erro ao carregar imóveis.</p>';
-                return;
-            }
+            if (error || !data) { grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: red;">Erro ao carregar imóveis.</p>'; return; }
             todosImoveis = data;
             preencherFiltrosDinamicos();
             aplicarFiltros();
@@ -348,31 +376,22 @@
             const selectBairro = document.getElementById('filtro-bairro');
             const painelTipo = document.getElementById('painel-tipo');
             const painelBairro = document.getElementById('painel-bairro');
-
             const tipos = new Set(); const bairros = new Set();
-            todosImoveis.forEach(i => {
-                if (i.tipo) tipos.add(i.tipo.trim());
-                if (i.bairro) bairros.add(i.bairro.trim());
-            });
-
+            todosImoveis.forEach(i => { if (i.tipo) tipos.add(i.tipo.trim()); if (i.bairro) bairros.add(i.bairro.trim()); });
             const htmlTipos = '<option value="">Todos os Tipos</option>' + Array.from(tipos).sort().map(t => `<option value="${t.toLowerCase()}">${t.charAt(0).toUpperCase() + t.slice(1)}</option>`).join('');
             const htmlBairros = '<option value="">Todos os Bairros</option>' + Array.from(bairros).sort().map(b => `<option value="${b.toLowerCase()}">${b}</option>`).join('');
-
             selectTipo.innerHTML = htmlTipos; painelTipo.innerHTML = htmlTipos;
             selectBairro.innerHTML = htmlBairros; painelBairro.innerHTML = htmlBairros;
         }
 
         function aplicarFiltros() {
-            // Captura os valores do painel (independente se está aberto ou não)
-            const buscaLivre = document.getElementById('painel-busca-livre').value.toLowerCase();
+            const buscaPainel = document.getElementById('painel-busca-livre').value.toLowerCase();
+            const buscaGeral = document.getElementById('busca-geral-pagina').value.toLowerCase();
             const codigoFiltro = document.getElementById('filtro-codigo').value.toLowerCase();
             const ordem = document.getElementById('filtro-ordem').value;
-
-            // Os valores abaixo vêm do select principal ou do painel. 
-            // Como o painel reflete o principal, vamos pegar o que estiver preenchido.
-            const tipoFiltro = document.getElementById('painel-tipo').value || document.getElementById('filtro-tipo').value;
-            const bairroFiltro = document.getElementById('painel-bairro').value || document.getElementById('filtro-bairro').value;
-
+            
+            const tipoFiltro = document.getElementById('painel-tipo').value;
+            const bairroFiltro = document.getElementById('painel-bairro').value;
             const precoMin = parseFloat(document.getElementById('painel-preco-min').value) || 0;
             const precoMax = parseFloat(document.getElementById('painel-preco-max').value) || Infinity;
 
@@ -380,29 +399,20 @@
                 const bateNegocio = imovel.negocio === tipoNegocio;
                 const bateTipo = !tipoFiltro || imovel.tipo.toLowerCase().includes(tipoFiltro);
                 const bateBairro = !bairroFiltro || imovel.bairro.toLowerCase().includes(bairroFiltro);
-                
                 const codigoImovel = imovel.codigo ? imovel.codigo.toLowerCase() : imovel.id.toString();
                 const bateCodigo = !codigoFiltro || codigoImovel.includes(codigoFiltro);
-                
-                const bateBusca = !buscaLivre || 
-                    imovel.titulo.toLowerCase().includes(buscaLivre) || 
-                    imovel.bairro.toLowerCase().includes(buscaLivre) || 
-                    codigoImovel.includes(buscaLivre);
-
                 const batePreco = imovel.preco >= precoMin && imovel.preco <= precoMax;
                 
-                // Filtros de quantidade (AQUI É ONDE ESTAVA O ERRO - agora usa as variáveis globais)
+                const textoBusca = `${imovel.titulo} ${imovel.bairro} ${imovel.descricao || ''} ${imovel.comodidades || ''} ${codigoImovel}`.toLowerCase();
+                const bateBuscaPainel = !buscaPainel || textoBusca.includes(buscaPainel);
+                const bateBuscaGeral = !buscaGeral || textoBusca.includes(buscaGeral);
+
                 const cQuartos = parseInt(imovel.quartos) || 0;
                 const cSuites = parseInt(imovel.suites) || 0;
                 const cBanheiros = parseInt(imovel.banheiros) || 0;
                 const cVagas = parseInt(imovel.vagas) || 0;
 
-                const bateQ = cQuartos >= reqQuartos;
-                const bateS = cSuites >= reqSuites;
-                const bateB = cBanheiros >= reqBanheiros;
-                const bateV = cVagas >= reqVagas;
-                
-                return bateNegocio && bateTipo && bateBairro && bateCodigo && bateBusca && batePreco && bateQ && bateS && bateB && bateV;
+                return bateNegocio && bateTipo && bateBairro && bateCodigo && batePreco && bateBuscaPainel && bateBuscaGeral && (cQuartos >= reqQuartos) && (cSuites >= reqSuites) && (cBanheiros >= reqBanheiros) && (cVagas >= reqVagas);
             });
 
             if (ordem === 'menor-preco') filtrados.sort((a, b) => a.preco - b.preco);
@@ -418,9 +428,8 @@
             semResultados.style.display = lista.length === 0 ? 'block' : 'none';
             contador.textContent = lista.length === 1 ? '1 imóvel encontrado' : `${lista.length} imóveis encontrados`;
 
-            // Mostra o botão de limpar se houver qualquer filtro ativo
             if (btnLimparRapido) {
-                const isFiltro = document.getElementById('filtro-tipo').value || document.getElementById('filtro-bairro').value || document.getElementById('filtro-codigo').value || reqQuartos > 0 || reqSuites > 0 || reqBanheiros > 0 || reqVagas > 0;
+                const isFiltro = document.getElementById('filtro-tipo').value || document.getElementById('filtro-bairro').value || document.getElementById('filtro-codigo').value || reqQuartos > 0 || document.getElementById('busca-geral-pagina').value;
                 btnLimparRapido.style.display = isFiltro ? 'inline-block' : 'none';
             }
 
@@ -431,6 +440,7 @@
                 let tagClass = imovel.negocio === 'aluguel' ? 'tag-aluguel' : '';
                 let precoTexto = imovel.negocio === 'aluguel' ? `R$ ${imovel.preco.toLocaleString('pt-BR')} <small>/mês</small>` : `R$ ${imovel.preco.toLocaleString('pt-BR')}`;
                 const suitesTexto = imovel.suites > 0 ? `<span><i class="fa-solid fa-door-open"></i> ${imovel.suites} Suítes</span>` : '';
+                const metragemTexto = imovel.metragem > 0 ? `<span><i class="fa-solid fa-ruler-combined"></i> ${imovel.metragem} m²</span>` : '';
 
                 grid.innerHTML += `
                     <div class="card">
@@ -445,6 +455,7 @@
                                 ${suitesTexto}
                                 <span><i class="fa-solid fa-bath"></i> ${imovel.banheiros} Banh</span>
                                 <span><i class="fa-solid fa-car"></i> ${imovel.vagas} Vagas</span>
+                                ${metragemTexto}
                             </div>
                             <a href="imovel.html?id=${imovel.id}" class="btn-card">Ver Detalhes</a>
                         </div>
@@ -453,7 +464,6 @@
             });
         }
 
-        // Eventos
         document.querySelectorAll('.btn-aba, .btn-op').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.btn-aba, .btn-op').forEach(b => b.classList.remove('active'));
@@ -464,32 +474,29 @@
         });
 
         document.getElementById('btn-buscar-pagina').addEventListener('click', aplicarFiltros);
+        document.getElementById('busca-geral-pagina').addEventListener('keyup', (e) => { if(e.key === 'Enter') aplicarFiltros(); });
         document.getElementById('filtro-codigo').addEventListener('keyup', (e) => { if(e.key === 'Enter') aplicarFiltros(); });
         document.getElementById('filtro-tipo').addEventListener('change', aplicarFiltros);
         document.getElementById('filtro-bairro').addEventListener('change', aplicarFiltros);
         document.getElementById('filtro-ordem').addEventListener('change', aplicarFiltros);
         if(btnAplicarPainel) btnAplicarPainel.addEventListener('click', aplicarFiltros);
 
-        // Limpar Filtros
         function resetarTudo() {
             document.getElementById('filtro-tipo').value = '';
             document.getElementById('filtro-bairro').value = '';
             document.getElementById('filtro-codigo').value = '';
+            document.getElementById('busca-geral-pagina').value = '';
             document.getElementById('painel-busca-livre').value = '';
             document.getElementById('painel-preco-min').value = '';
             document.getElementById('painel-preco-max').value = '';
             document.getElementById('painel-tipo').value = '';
             document.getElementById('painel-bairro').value = '';
             
-            // Zera as variáveis globais de quartos/suites
             reqQuartos = 0; reqSuites = 0; reqBanheiros = 0; reqVagas = 0;
             
             ['filtro-quartos', 'filtro-suites', 'filtro-banheiros', 'filtro-vagas'].forEach(id => {
                 const c = document.getElementById(id);
-                if(c) c.querySelectorAll('.btn-qtd').forEach((b, i) => { 
-                    if(i===0) b.classList.add('active'); 
-                    else b.classList.remove('active'); 
-                });
+                if(c) c.querySelectorAll('.btn-qtd').forEach((b, i) => { if(i===0) b.classList.add('active'); else b.classList.remove('active'); });
             });
             aplicarFiltros();
         }
@@ -497,7 +504,6 @@
         if(btnLimparPainel) btnLimparPainel.addEventListener('click', () => { resetarTudo(); fecharPainel(); });
         if(btnLimparRapido) btnLimparRapido.addEventListener('click', resetarTudo);
 
-        // Menu e Tema
         const menuToggle = document.getElementById('menu-toggle');
         const nav = document.getElementById('nav');
         if (menuToggle && nav) {

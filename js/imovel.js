@@ -108,7 +108,7 @@ async function carregarImovel() {
         }
         document.getElementById('imovel-preco-nota').textContent = data.nota_preco || '';
 
-        // Adiciona a Suíte nas características (se existir)
+        // CARACTERÍSTICAS (AQUI ENTRA A METRAGEM)
         document.getElementById('imovel-caracteristicas').innerHTML = `
             <div class="carac-item">
                 <i class="fa-solid fa-bed"></i>
@@ -129,6 +129,11 @@ async function carregarImovel() {
                 <i class="fa-solid fa-car"></i>
                 <strong>${data.vagas ?? 0}</strong>
                 <span>Vagas</span>
+            </div>
+            <div class="carac-item">
+                <i class="fa-solid fa-ruler-combined"></i>
+                <strong>${data.metragem ?? 0}</strong>
+                <span>Área (m²)</span>
             </div>
             <div class="carac-item">
                 <i class="fa-solid fa-house"></i>
