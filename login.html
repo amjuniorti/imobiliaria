@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar | Sua Casa Imóveis</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .login-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2000&auto=format&fit=crop') center/cover; padding: 20px; }
+        .login-card { background: var(--bg-card); width: 100%; max-width: 420px; padding: 40px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1px solid var(--border-color); text-align: center; position: relative; }
+        .login-card .logo { display: inline-block; margin-bottom: 20px; font-size: 28px; color: var(--text-main); }
+        .login-card h2 { color: var(--text-main); font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+        .login-card p { color: var(--text-muted); font-size: 15px; margin-bottom: 30px; }
+        
+        /* ABAS DE PERFIL */
+        .tabs-perfil { display: flex; gap: 10px; margin-bottom: 25px; background: var(--bg-body); padding: 5px; border-radius: 10px; }
+        .btn-perfil { flex: 1; padding: 12px; border: none; background: transparent; color: var(--text-muted); font-weight: 700; font-size: 14px; cursor: pointer; border-radius: 8px; transition: all 0.2s; }
+        .btn-perfil.active { background: var(--bg-card); color: var(--primary-color); box-shadow: var(--shadow-sm); }
+
+        .login-card .input-group { text-align: left; margin-bottom: 20px; }
+        .login-card .input-group label { display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; }
+        .login-card .input-group input { width: 100%; padding: 14px 16px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-main); border-radius: 10px; outline: none; font-size: 15px; transition: border 0.2s; }
+        .login-card .input-group input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.1); }
+        
+        .btn-login { width: 100%; padding: 16px; background: var(--accent-color); color: #fff; border: none; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3); margin-top: 10px; }
+        .btn-login:hover { background: #ea580c; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4); }
+        
+        .link-voltar { display: inline-block; margin-top: 25px; color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 600; transition: color 0.2s; }
+        .link-voltar:hover { color: var(--primary-color); }
+        
+        #erro-login { color: #ef4444; background: rgba(239, 68, 68, 0.1); padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; margin-bottom: 20px; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="login-page">
+        <div class="login-card">
+            <a href="index.html" class="logo">Sua Casa <span>Imóveis</span></a>
+            <h2>Acesse sua conta</h2>
+            <p>Selecione o seu perfil para continuar.</p>
+
+            <!-- SELEÇÃO DE PERFIL -->
+            <div class="tabs-perfil">
+                <button type="button" class="btn-perfil active" id="btn-sou-inquilino" onclick="mudarPerfil('inquilino')"><i class="fa-solid fa-house-user"></i> Inquilino</button>
+                <button type="button" class="btn-perfil" id="btn-sou-proprietario" onclick="mudarPerfil('proprietario')"><i class="fa-solid fa-user-tie"></i> Proprietário</button>
+            </div>
+
+            <div id="erro-login">E-mail ou senha incorretos.</div>
+
+            <form id="form-login-pagina">
+                <div class="input-group">
+                    <label>E-mail</label>
+                    <input type="email" id="login-email" placeholder="seu@email.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Senha</label>
+                    <input type="password" id="login-senha" placeholder="********" required>
+                </div>
+                <button type="submit" class="btn-login" id="btn-entrar">
+                    Entrar como Inquilino <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </button>
+            </form>
+
+            <a href="index.html" class="link-voltar"><i class="fa-solid fa-arrow-left"></i> Voltar para o site</a>
+        </div>
+    </div>
+
+                   <script>
+        const SUPABASE_URL = 'https://hkqnpvixhrdorugcavtl.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrcW5wdml4aHJkb3J1Z2NhdnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3ODQ2OTAsImV4cCI6MjEwODM2MDY5MH0.XZOr0ykH00awbxSpsV7zgAS6n81xIqiGkxQOZqOseFI';
+        const { createClient } = supabase;
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: true } });
+
+        let perfilSelecionado = 'inquilino';
+
+        function mudarPerfil(perfil) {
+            perfilSelecionado = perfil;
+            document.querySelectorAll('.btn-perfil').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-sou-' + perfil).classList.add('active');
+            
+            const btnEntrar = document.getElementById('btn-entrar');
+            if (perfil === 'inquilino') {
+                btnEntrar.innerHTML = 'Entrar como Inquilino <i class="fa-solid fa-arrow-right-to-bracket"></i>';
+            } else {
+                btnEntrar.innerHTML = 'Entrar como Proprietário <i class="fa-solid fa-arrow-right-to-bracket"></i>';
+            }
+        }
+
+        document.getElementById('form-login-pagina').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-entrar');
+            const erroDiv = document.getElementById('erro-login');
+            
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Entrando...';
+            btn.disabled = true;
+            erroDiv.style.display = 'none';
+
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
+            const senha = document.getElementById('login-senha').value;
+
+            const { data, error } = await _supabase.auth.signInWithPassword({ email, password: senha });
+
+            if (error) {
+                erroDiv.style.display = 'block';
+                erroDiv.textContent = "E-mail ou senha incorretos.";
+                mudarPerfil(perfilSelecionado);
+                btn.disabled = false;
+                return;
+            }
+
+            // PEGA A ROLE DIRETO DO BANCO DE DADOS (METADADOS DO USUÁRIO)
+            const roleDoBanco = data.user.user_metadata?.role;
+            console.log("Email logado:", email);
+            console.log("Role no banco de dados:", roleDoBanco);
+
+            // REGRA 1: SE FOR ADMIN (Pelo banco ou por email específico)
+            // Troque 'seuemail@gmail.com' pelo email que você usa para logar no admin!
+            const isAdmin = (roleDoBanco === 'admin') || (email === 'amjunior.amj@gmail.com'); 
+
+            if (isAdmin) {
+                window.location.href = "admin.html";
+                return;
+            }
+
+            // REGRA 2: SE NÃO FOR ADMIN, OBEDECE O BANCO (Se o banco tiver a role)
+            if (roleDoBanco === 'proprietario') {
+                window.location.href = "proprietario.html";
+                return;
+            }
+            if (roleDoBanco === 'inquilino') {
+                window.location.href = "inquilino.html";
+                return;
+            }
+
+            // REGRA 3: SE O BANCO ESTIVER VAZIO, OBEDECE A TELA (O botão que foi clicado)
+            if (perfilSelecionado === 'proprietario') {
+                window.location.href = "proprietario.html";
+            } else {
+                window.location.href = "inquilino.html";
+            }
+        });
+    </script>
+</body>
+</html>

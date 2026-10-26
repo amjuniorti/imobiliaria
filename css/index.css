@@ -1,0 +1,36 @@
+/* ========================================
+   ESTILOS ESPECÍFICOS DO INDEX (REFINAR PESQUISA)
+   ======================================== */
+.overlay-filtros { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+.overlay-filtros.ativo { opacity: 1; visibility: visible; }
+.painel-filtros { position: fixed; top: 0; right: -420px; width: 100%; max-width: 420px; height: 100vh; background: var(--bg-card); z-index: 1001; box-shadow: -10px 0 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+.painel-filtros.aberto { right: 0; }
+.painel-header { display: flex; justify-content: space-between; align-items: center; padding: 25px; border-bottom: 1px solid var(--border-color); background: var(--bg-body); }
+.painel-header h2 { font-size: 20px; color: var(--text-main); font-weight: 800; margin: 0; }
+.btn-fechar-filtros { background: transparent; border: none; font-size: 24px; color: var(--text-muted); cursor: pointer; transition: color 0.2s; }
+.btn-fechar-filtros:hover { color: #ef4444; }
+.painel-corpo { padding: 25px; overflow-y: auto; flex: 1; }
+.grupo-filtro { margin-bottom: 25px; }
+.grupo-filtro label { display: block; font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 10px; }
+.input-busca-painel { width: 100%; padding: 14px 16px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-body); color: var(--text-main); outline: none; font-size: 15px; transition: border 0.2s; }
+.input-busca-painel:focus { border-color: var(--primary-color); }
+.botoes-operacao { display: flex; gap: 10px; }
+.btn-op { flex: 1; padding: 14px; border: 1px solid var(--border-color); background: transparent; color: var(--text-muted); border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.btn-op.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+.input-row-painel { display: flex; gap: 15px; }
+.input-row-painel > div { flex: 1; }
+.input-row-painel input { width: 100%; padding: 14px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-body); color: var(--text-main); outline: none; font-size: 15px; }
+.painel-footer { padding: 25px; border-top: 1px solid var(--border-color); display: flex; gap: 15px; background: var(--bg-card); box-shadow: 0 -10px 20px rgba(0,0,0,0.05); }
+.btn-limpar-painel { flex: 1; padding: 16px; background: transparent; border: 2px solid var(--border-color); border-radius: 10px; color: var(--text-muted); font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.btn-limpar-painel:hover { border-color: #ef4444; color: #ef4444; }
+.btn-aplicar-painel { flex: 2; padding: 16px; background: var(--primary-color); color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 16px; transition: all 0.2s; }
+.btn-aplicar-painel:hover { background: #1e3a8a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(43, 108, 176, 0.3); }
+.btn-group-qtd { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-qtd { flex: 1; min-width: 50px; padding: 12px 0; border: 1px solid var(--border-color); background: transparent; color: var(--text-muted); border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.2s; }
+.btn-qtd:hover { border-color: var(--primary-color); color: var(--primary-color); }
+.btn-qtd.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+
+/* 4 COLUNAS NA BUSCA */
+.search-fields { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; align-items: end; margin-bottom: 15px; }
+@media (max-width: 900px) { .search-fields { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .search-fields { grid-template-columns: 1fr; } }

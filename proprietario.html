@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Proprietário | Sua Casa Imóveis</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/proprietario.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <header class="header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">Sua Casa <span>Imóveis</span></a>
+            <button class="menu-toggle" id="menu-toggle"><i class="fa-solid fa-bars"></i></button>
+            <nav class="nav" id="nav">
+                <a href="index.html">Ver Site</a>
+                <button class="btn-tema" id="btn-tema"><i class="fa-solid fa-moon" id="icone-tema"></i></button>
+                <a href="#" id="btn-sair" style="color: #fc8181; font-weight: bold;"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <div class="dashboard-header">
+            <h1><i class="fa-solid fa-user-tie"></i> Painel do Proprietário</h1>
+            <span style="color: var(--text-muted);" id="nome-proprietario">Carregando...</span>
+        </div>
+
+        <div class="tabs-container">
+            <button class="tab-btn-dash active" data-tab="tab-imoveis">Meus Imóveis</button>
+            <button class="tab-btn-dash" data-tab="tab-contratos">Contratos</button>
+            <button class="tab-btn-dash" data-tab="tab-inquilinos">Inquilinos</button>
+            <button class="tab-btn-dash" data-tab="tab-ocorrencias">Ocorrências</button>
+        </div>
+
+        <div id="tab-imoveis" class="tab-pane active">
+            <div class="cards-resumo">
+                <div class="card-resumo">
+                    <i class="fa-solid fa-house"></i>
+                    <div class="card-resumo-info"><h3 id="resumo-alugados">0</h3><p>Imóveis Alugados</p></div>
+                </div>
+                <div class="card-resumo">
+                    <i class="fa-solid fa-sack-dollar"></i>
+                    <div class="card-resumo-info"><h3 id="resumo-renda">R$ 0</h3><p>Renda Mensal</p></div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead><tr><th>Imóvel</th><th>Status</th><th>Inquilino</th><th>Valor</th></tr></thead>
+                    <tbody id="tabela-imoveis"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-contratos" class="tab-pane">
+            <div class="table-responsive">
+                <table>
+                    <thead><tr><th>ID Contrato</th><th>Imóvel</th><th>Vencimento</th><th>Status</th></tr></thead>
+                    <tbody id="tabela-contratos"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-inquilinos" class="tab-pane">
+            <p style="color: var(--text-muted); padding: 20px;">Lista de inquilinos (em breve).</p>
+        </div>
+
+        <div id="tab-ocorrencias" class="tab-pane">
+            <p style="color: var(--text-muted); padding: 20px;">Ocorrências e pedidos de manutenção (em breve).</p>
+        </div>
+    </main>
+
+    <script src="js/proprietario.js"></script>
+</body>
+</html>

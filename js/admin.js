@@ -1,5 +1,5 @@
 /* ========================================
-   ADMIN - LÓGICA COMPLETA, TEMA E MENU
+   ADMIN - LÓGICA COMPLETA
    ======================================== */
 
 const SUPABASE_URL = 'https://hkqnpvixhrdorugcavtl.supabase.co';
@@ -107,9 +107,49 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         btn.classList.add('active');
         document.getElementById(btn.dataset.tab).classList.add('active');
+        
+        // Carrega dados específicos ao clicar na aba
         if (btn.dataset.tab === 'tab-mensagens') carregarMensagens();
     });
 });
+
+// ====== CADASTRAR USUÁRIO ======
+const formCadastroUsuario = document.getElementById('form-cadastro-usuario');
+if (formCadastroUsuario) {
+    formCadastroUsuario.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-salvar-user');
+        const nome = document.getElementById('user-nome').value;
+        const email = document.getElementById('user-email').value;
+        const senha = document.getElementById('user-senha').value;
+        const role = document.getElementById('user-role').value;
+
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Cadastrando...';
+        btn.disabled = true;
+
+        // Cria o usuário no Auth do Supabase com os metadados (nome e role)
+        const { data, error } = await _supabase.auth.signUp({
+            email: email,
+            password: senha,
+            options: {
+                data: {
+                    nome: nome,
+                    role: role
+                }
+            }
+        });
+
+        if (error) {
+            alert('Erro ao cadastrar: ' + error.message);
+        } else {
+            alert(`Usuário ${nome} cadastrado como ${role} com sucesso!`);
+            formCadastroUsuario.reset();
+        }
+        
+        btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Cadastrar Usuário';
+        btn.disabled = false;
+    });
+}
 
 // ====== BUSCAR IMÓVEIS ======
 async function carregarImoveis() {
@@ -338,7 +378,7 @@ function resetForm() {
     if(btnSalvar) btnSalvar.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar Imóvel';
 }
 
-// ====== MENSAGENS (LAYOUT CORRIGIDO) ======
+// ====== MENSAGENS ======
 async function carregarMensagens() {
     listaMensagens.innerHTML = '<p style="text-align:center;">Carregando...</p>';
     const { data } = await _supabase.from('mensagens').select('*').order('created_at', { ascending: false });
@@ -352,40 +392,37 @@ async function carregarMensagens() {
     data.forEach(msg => {
         const div = document.createElement('div');
         div.className = 'item-admin';
+        div.style.flexDirection = 'column';
+        div.style.alignItems = 'flex-start';
         div.style.borderLeft = msg.lida ? '4px solid #38a169' : '4px solid transparent';
 
-        // Layout corrigido para não sobrepor no celular
         let acoesHTML = msg.lida ? `
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; width: 100%; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; width: 100%;">
                 <span style="font-size:14px; color:#38a169; font-weight:bold; display:flex; align-items:center; gap:6px;">
                     <i class="fa-solid fa-circle-check" style="font-size: 18px;"></i> Mensagem Concluída
                 </span>
-                <button onclick="excluirMensagem(${msg.id})" class="btn-acao delete" style="background:#e53e3e; color:#fff; border:none;">
+                <button onclick="excluirMensagem(${msg.id})" class="btn-acao delete" style="background:#e53e3e; color:#fff; border:none; padding: 6px 12px; border-radius:4px; cursor:pointer;">
                     <i class="fa-solid fa-trash"></i> Apagar
                 </button>
             </div>
         ` : `
-            <div style="display: flex; gap: 10px; margin-top: 15px; width: 100%;">
-                <button onclick="marcarLida(${msg.id}, event)" class="btn-acao" style="flex: 1; background:#38a169; color:#fff; border:none;">
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button onclick="marcarLida(${msg.id}, event)" class="btn-acao" style="background:#38a169; color:#fff; border:none; padding: 6px 12px; border-radius:4px; cursor:pointer;">
                     <i class="fa-solid fa-check"></i> Concluir
                 </button>
-                <button onclick="excluirMensagem(${msg.id})" class="btn-acao delete" style="flex: 1; background:#e53e3e; color:#fff; border:none;">
+                <button onclick="excluirMensagem(${msg.id})" class="btn-acao delete" style="background:#e53e3e; color:#fff; border:none; padding: 6px 12px; border-radius:4px; cursor:pointer;">
                     <i class="fa-solid fa-trash"></i> Apagar
                 </button>
             </div>
         `;
 
         div.innerHTML = `
-            <div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 10px;">
-                <strong style="color: var(--primary-color); font-size: 15px; margin-bottom: 5px;">
-                    ${msg.nome} <br>
-                    <span style="font-size: 13px; color: var(--text-muted); font-weight: normal;">(${msg.email})</span>
-                </strong>
+            <div style="width: 100%; display: flex; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 5px;">
+                <strong style="color: var(--primary-color);">${msg.nome} (${msg.email})</strong>
                 <span style="font-size: 12px; color: var(--text-muted);">${new Date(msg.created_at).toLocaleString('pt-BR')}</span>
             </div>
-            <p style="margin-bottom: 10px; font-size: 14px; color: var(--text-main); background: rgba(0,0,0,0.05); padding: 10px; border-radius: 8px; width: 100%; box-sizing: border-box; word-wrap: break-word;">${msg.mensagem}</p>
-            <p style="font-size: 13px; color: var(--text-muted);"><i class="fa-solid fa-phone"></i> ${msg.telefone || 'Não informado'}</p>
-            
+            <p style="margin-bottom: 10px; font-size: 14px; color: var(--text-main);">${msg.mensagem}</p>
+            <p style="font-size: 12px; color: var(--text-muted);"><i class="fa-solid fa-phone"></i> ${msg.telefone || 'Não informado'}</p>
             ${acoesHTML}
         `;
         listaMensagens.appendChild(div);

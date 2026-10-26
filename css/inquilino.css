@@ -1,0 +1,39 @@
+/* ========================================
+   ESTILOS DO PAINEL DO INQUILINO
+   ======================================== */
+.dashboard-main { padding: 40px 20px; max-width: 1000px; margin: 0 auto; min-height: 80vh; }
+.dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+.dashboard-header h1 { font-size: 28px; color: var(--text-main); font-weight: 800; }
+
+/* Card Imóvel Locado */
+.card-locado { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-md); margin-bottom: 40px; display: flex; flex-wrap: wrap; }
+.card-locado-img { flex: 1; min-width: 300px; height: 250px; background: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800') center/cover; }
+.card-locado-info { flex: 1; padding: 30px; min-width: 300px; display: flex; flex-direction: column; justify-content: center; }
+.card-locado-info h2 { font-size: 24px; color: var(--text-main); margin-bottom: 10px; }
+.card-locado-info p { color: var(--text-muted); margin-bottom: 20px; }
+
+.info-row { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 15px; }
+.info-item { display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 600; }
+.info-item i { color: var(--primary-color); }
+
+.status-badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+.status-pago { background: #dcfce7; color: #166534; }
+body.dark-mode .status-pago { background: rgba(22, 101, 52, 0.3); color: #86efac; }
+
+/* Box Boleto */
+.box-boleto { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: var(--shadow-md); margin-bottom: 40px; }
+.box-boleto h3 { font-size: 20px; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; color: var(--text-main); }
+
+.boleto-atual { display: flex; justify-content: space-between; align-items: center; background: var(--bg-body); padding: 20px; border-radius: 12px; flex-wrap: wrap; gap: 15px; border: 1px solid var(--border-color); }
+.boleto-valor { font-size: 24px; font-weight: 800; color: #10b981; }
+.boleto-vencimento { font-size: 14px; color: var(--text-muted); margin-top: 5px; }
+
+.btn-boleto { background: var(--primary-color); color: #fff; padding: 14px 24px; border-radius: 10px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; border: none; cursor: pointer; transition: all 0.2s; }
+.btn-boleto:hover { background: #1e3a8a; transform: translateY(-2px); }
+
+/* Box Ocorrência */
+.box-ocorrencia { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: var(--shadow-md); }
+.box-ocorrencia h3 { font-size: 20px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+
+.form-ocorrencia input, .form-ocorrencia textarea { width: 100%; padding: 14px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-body); color: var(--text-main); margin-bottom: 15px; font-family: inherit; outline: none; }
+.form-ocorrencia input:focus, .form-ocorrencia textarea:focus { border-color: var(--primary-color); }
